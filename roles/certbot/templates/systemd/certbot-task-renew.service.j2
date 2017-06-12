@@ -1,0 +1,9 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=Renew certificates
+
+[Service]
+Type=oneshot
+ExecStart={{ certbot__cmd_new_base }}/certbot-renew
+User=root

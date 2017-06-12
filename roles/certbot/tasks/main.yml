@@ -1,0 +1,118 @@
+---
+- assert: { that: "ansible_service_mgr == 'systemd'" }
+
+- name: "get rid of maintainer's units"
+  systemd:
+    unit:    "certbot.{{ item }}"
+    state:   stopped
+    enabled: false
+    masked:  true
+  ignore_errors: true
+  with_items:
+    - service
+    - timer
+
+- name: install packages (apt)
+  apt:
+    name:  "{{ certbot__required_packages |to_package_list }}"
+    state: latest
+  when: ansible_pkg_mgr == 'apt'
+  tags:
+    - package:install
+    - package
+
+- name: install packages (yum)
+  yum:
+    name:  "{{ certbot__required_packages |to_package_list }}"
+    state: latest
+  when: ansible_pkg_mgr == 'yum'
+  tags:
+    - package:install
+    - package
+
+- name: converge group
+  group:
+    name: "{{ certbot__group }}"
+    system: yes
+
+- name: converge user
+  user:
+    name: "{{ certbot__user }}"
+    group: "{{ certbot__group }}"
+    system: yes
+    home: /
+    createhome: no
+    shell: '/bin/false'
+
+- name: converge directories
+  file:
+    state: directory
+    path:  "{{ item }}"
+    owner: "{{ certbot__user }}"
+    group: "{{ certbot__group }}"
+    mode:  0755
+  with_items:
+    - "{{ certbot__webroot }}"
+    - "{{ certbot__log_dir }}"
+    - "{{ certbot__etc_dir }}"
+    - "{{ certbot__work_dir }}"
+
+- include: internal_web_server.yml
+  static: no
+  when: certbot__internal_web_server
+
+- set_fact:
+    certbot__v_python_exe_to_use: "{{ ansible_python.executable }}"
+  when: not certbot__internal_web_server
+
+- name: converge scripts
+  template:
+    src:   "scripts/{{ item }}.j2"
+    dest:  "{{ certbot__cmd_new_base }}/{{ item }}"
+    owner: root
+    group: root
+    mode:  0755
+  with_items:
+    - certbot
+    - certbot-certonly
+    - certbot-renew
+  tags:
+    - package:install
+    - package
+
+- name: remove obsolete stuff
+  file:
+    path:  "{{ item }}"
+    state: absent
+  with_items:
+    - /usr/local/sbin/certbot-certonly
+    - /usr/local/sbin/certbot-renew
+    - /etc/certbot-vars
+
+- name: "disable maintainer's cmd"
+  file:
+    path: "{{ certbot__cmd_path }}"
+    mode: "a-x"
+
+- name: converge timer
+  template:
+    src:  "systemd/certbot-task-renew.{{ item }}.j2"
+    dest: "/etc/systemd/system/certbot-task-renew.{{ item }}"
+    owner: root
+    group: root
+    mode:  0644
+  with_items:
+    - service
+    - timer
+  notify: restart certbot-task-renew.timer
+
+- name: ensure our timer is started
+  systemd:
+    unit:    certbot-task-renew.timer
+    daemon_reload: true
+    enabled: true
+    state:   started
+
+- include: nginx.yml
+  static: no
+  when: not certbot__internal_web_server

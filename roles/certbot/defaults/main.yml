@@ -1,0 +1,22 @@
+---
+certbot__required_packages:
+  certbot:  true
+
+certbot__cmd_path: '/usr/bin/certbot'
+certbot__cmd_new_base: '/usr/local/bin'
+
+certbot__webroot: '/var/www-certbot'
+certbot__log_dir: '/var/log/certbot'
+certbot__etc_dir: '/etc/certbot'
+certbot__work_dir: '/var/lib/certbot'
+
+certbot__user: 'certbot'
+certbot__group: 'certbot'
+
+certbot__reload_service_cmds:
+  - "/usr/sbin/nginx -t"
+  - "systemctl reload nginx"
+
+certbot__nginx_include_dir: "{{ certbot__etc_dir }}-nginx"
+
+certbot__internal_web_server: false

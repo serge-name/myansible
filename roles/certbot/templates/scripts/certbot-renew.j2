@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# **** {{ ansible_managed }} ****
+
+{% if certbot__internal_web_server %}
+web_opts="--standalone --preferred-challenges http"
+{% else %}
+webroot="{{ certbot__webroot }}"
+web_opts="--webroot -w $webroot"
+{% endif %}
+reload_flag="{{ certbot__etc_dir }}/service_needs_reload"
+
+{{ certbot__cmd_new_base }}/certbot renew \
+  $web_opts \
+  --non-interactive \
+  --user-agent "" \
+  --post-hook "touch $reload_flag"
+
+[[ -f $reload_flag ]] && (
+  set -e
+{% for cmd in certbot__reload_service_cmds %}
+  {{ cmd }}
+{% endfor %}
+) && rm -f $reload_flag
+
+true

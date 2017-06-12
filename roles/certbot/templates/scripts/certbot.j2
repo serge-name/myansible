@@ -1,0 +1,56 @@
+#!{{ certbot__v_python_exe_to_use }}
+
+# **** {{ ansible_managed }} ****
+
+import sys
+import os
+from getpass import getuser
+from pwd import getpwnam
+from pkg_resources import load_entry_point
+
+user="{{ certbot__user }}"
+logs_dir="{{ certbot__log_dir }}"
+config_dir="{{ certbot__etc_dir }}"
+work_dir="{{ certbot__work_dir }}"
+
+def is_opt_missing(opts):
+    for o in opts:
+        if o in sys.argv:
+            return False
+
+    return True
+
+if getuser() == 'root':
+    sys.stderr.write("changing user to {}\n".format(user))
+    pw = getpwnam(user)
+    os.setgid(pw.pw_gid)
+    os.setuid(pw.pw_uid)
+    os.environ['USER'] = user
+    os.environ['LOGNAME'] = user
+    os.environ['HOME'] = pw.pw_dir
+    os.environ['UID'] = str(pw.pw_uid)
+    # regain the cap_net_bind_service
+    os.execv(sys.argv[0], sys.argv)
+elif getuser() != user:
+    stderr.write("%s: run as user %s\n".format(sys.argv[0], user))
+    exit(1)
+
+if is_opt_missing(['-c', '--config', '--config-dir']):
+    sys.argv.insert(1, '--config-dir')
+    sys.argv.insert(2, config_dir)
+
+if is_opt_missing(['--logs-dir']):
+    sys.argv.insert(1, '--logs-dir')
+    sys.argv.insert(2, logs_dir)
+
+if is_opt_missing(['--work-dir']):
+    sys.argv.insert(1, '--work-dir')
+    sys.argv.insert(2, work_dir)
+
+if is_opt_missing(['--text']):
+    sys.argv.insert(1, '--text')
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('certbot', 'console_scripts', 'certbot')()
+    )

@@ -1,0 +1,6 @@
+---
+- name: restart certbot-task-renew.timer
+  systemd:
+    unit:    certbot-task-renew.timer
+    daemon_reload: true
+    state:   restarted

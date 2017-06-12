@@ -1,0 +1,31 @@
+---
+# do a black magic to make internal web server work
+
+- name: read symlink
+  stat: { path: "{{ ansible_python.executable }}" }
+  register: certbot__v_python_exe_stat
+
+- name:
+  set_fact:
+    certbot__v_python_exe_orig:   "{{ certbot__v_python_exe_stat.stat.lnk_source }}"
+    certbot__v_python_exe_to_use: "{{ certbot__v_python_exe_stat.stat.lnk_source }}_certbot"
+
+- name: check whether everything is done
+  stat: { path: "{{ certbot__v_python_exe_to_use }}" }
+  register: certbot__v_python_exe_to_use_stat
+
+- block:
+    - name: copy python executable
+      command: "cp -a {{ certbot__v_python_exe_orig }} {{ certbot__v_python_exe_to_use }}"
+
+    - name: set python executable attributes
+      file:
+        path: "{{ certbot__v_python_exe_to_use }}"
+        owner: "{{ certbot__user }}"
+        group: "{{ certbot__group }}"
+        mode:  0700
+
+    - name: add cap_net_bind_service to python executable
+      command: "setcap 'cap_net_bind_service=+ep' {{ certbot__v_python_exe_to_use }}"
+
+  when: not certbot__v_python_exe_to_use_stat.stat.exists

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# **** {{ ansible_managed }} ****
+
+{% if certbot__internal_web_server %}
+web_opts="--standalone --preferred-challenges http"
+{% else %}
+webroot="{{ certbot__webroot }}"
+web_opts="--webroot -w $webroot"
+{% endif %}
+
+email="$1"
+shift
+
+if [[ -z "$email" ]] || [[ -z "$*" ]]; then
+  echo "Usage: $0 EMAIL DOMAIN [DOMAIN] [DOMAIN]" >&2
+  exit 1
+fi
+
+domains=""
+for i in "$@"; do
+  domains="$domains -d $i"
+done
+
+{{ certbot__cmd_new_base }}/certbot certonly \
+  $web_opts \
+  --agree-tos --non-interactive \
+  --user-agent "" \
+  --email "$email" $domains

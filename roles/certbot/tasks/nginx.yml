@@ -1,0 +1,16 @@
+---
+- name: converge {{ certbot__nginx_include_dir }}
+  file:
+    state: directory
+    path:  "{{ certbot__nginx_include_dir }}"
+    owner: root
+    group: root
+    mode:  0755
+
+- name: converge certbot nginx location
+  template:
+    src:  nginx/acme-challenge.conf.j2
+    dest: "{{ certbot__nginx_include_dir }}/acme-challenge.conf"
+    owner: root
+    group: root
+    mode:  0644
