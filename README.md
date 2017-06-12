@@ -1,7 +1,7 @@
 # How to use this stuff
 
 1. `cd some/path/to/ansible/playbooks/`
-2. `git submodule add https://… _myansible`
+2. `git submodule add https://github.com/serge-name/myansible.git _myansible`
 3. add the following to `ansible.cfg`:
     <pre>[defaults]
    # …
