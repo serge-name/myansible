@@ -41,7 +41,7 @@
   systemd:
     name:    "memcached-{{ item.key }}.service"
     enabled: true
-    state:   "{{ memcached__v_systemd_task_unit |is_changed('memcached__v_systemd_loop', (item.key |string)) |ternary('restarted', 'started') }}"
+    state:   "{{ memcached__v_systemd_task_unit |is_changed('memcached__v_systemd_loop', item.key) |ternary('restarted', 'started') }}"
   with_dict: "{{ memcached__instances }}"
 
 - name: start memcached.target
