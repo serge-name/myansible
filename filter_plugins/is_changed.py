@@ -17,7 +17,12 @@ class FilterModule(object):
 
         for item in res:
             if item.has_key(key) and item.has_key('changed'):
-                if item[key] == value and item['changed'] == True:
+                if type(item[key]) is dict:
+                    value_from_result = item[key]['key']
+                else:
+                    value_from_result = item[key]
+
+                if value_from_result == value and item['changed'] == True:
                     return True
 
         return False
