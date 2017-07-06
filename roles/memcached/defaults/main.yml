@@ -1,0 +1,13 @@
+---
+memcached__required_packages:
+  memcached: true
+
+memcached__user: 'memcache'
+
+memcached__instances: {}
+#  11211:
+#    loopback: false
+#    mem:      0.15
+#  11212:
+#    loopback: true
+#    mem:      0.32

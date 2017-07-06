@@ -1,0 +1,51 @@
+---
+- name: "disable maintainer's unit"
+  systemd:
+    unit:    memcached.service
+    state:   stopped
+    enabled: no
+    masked:  yes
+  ignore_errors: true
+
+- name: install packages
+  apt:
+    name: "{{ memcached__required_packages |to_package_list }}"
+    install_recommends: no
+  notify: restart memcached.target
+
+- name: install memcached service
+  template:
+    src:   "systemd/memcached-.service.j2"
+    dest:  "/etc/systemd/system/memcached-{{ memcached__v_systemd_loop.key }}.service"
+    owner: root
+    group: root
+    mode:  0644
+  register: memcached__v_systemd_task_unit
+  with_dict: "{{ memcached__instances }}"
+  loop_control:
+    loop_var: memcached__v_systemd_loop
+
+- name: install memcached target
+  template:
+    src:   systemd/memcached.target.j2
+    dest:  "/etc/systemd/system/memcached.target"
+    owner: root
+    group: root
+    mode:  0644
+
+- name: reload systemd
+  command: systemctl daemon-reload
+  when: memcached__v_systemd_task_unit.changed
+
+- name: (re)start unit
+  systemd:
+    name:    "memcached-{{ item.key }}.service"
+    enabled: true
+    state:   "{{ memcached__v_systemd_task_unit |is_changed('memcached__v_systemd_loop', (item.key |string)) |ternary('restarted', 'started') }}"
+  with_dict: "{{ memcached__instances }}"
+
+- name: start memcached.target
+  systemd:
+    name:    "memcached.target"
+    enabled: true
+    state:   started
