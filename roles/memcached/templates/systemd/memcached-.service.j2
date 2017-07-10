@@ -15,9 +15,9 @@ CapabilityBoundingSet=
 PrivateDevices=true
 NoNewPrivileges=true
 ReadOnlyDirectories=/
-ExecStart=/usr/bin/memcached -l {{ memcached__v_systemd_loop.value.loopback |default(true) |ternary('127.0.0.1','0.0.0.0') }} \
+ExecStart=/usr/bin/memcached -l {{ memcached__v_systemd_loop.value.loopback |default(memcached__loopback_default) |ternary('127.0.0.1','0.0.0.0') }} \
                              -p {{ memcached__v_systemd_loop.key }} \
-                             -m {{ ((ansible_memory_mb.real.total|float) * (memcached__v_systemd_loop.value.mem |default(0.10) |float)) |int }}
+                             -m {{ ((ansible_memory_mb.real.total|float) * (memcached__v_systemd_loop.value.mem |default(memcached__mem_default) |float)) |int }}
 TimeoutStopSec=3s
 KillMode=control-group
 Restart=on-failure
