@@ -1,0 +1,10 @@
+---
+zfs_tune__modprobe_file: '/etc/modprobe.d/zfs.conf'
+zfs_tune__module_path: '/sys/module/zfs/parameters'
+
+zfs_tune__vars: {}
+
+# A typical use case:
+#
+# zfs_tune__vars:
+#   zfs_arc_max: "{{ 1024*1024*1024*16 }}"  # 16G

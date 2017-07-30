@@ -1,0 +1,17 @@
+---
+- include: update_var.yml
+  static: no
+  vars:
+    zfs_tune__v_var_name: "{{ item.key }}"
+    zfs_tune__v_var_value: "{{ item.value }}"
+  with_dict: "{{ zfs_tune__vars }}"
+
+- name: save module vars
+  template:
+    src:    "{{ zfs_tune__modprobe_file |basename }}.j2"
+    dest:   "{{ zfs_tune__modprobe_file }}"
+    owner:  root
+    group:  root
+    mode:   0644
+    backup: yes
+  notify: update initramfs

@@ -1,0 +1,9 @@
+---
+- name: read a var
+  command: cat {{ zfs_tune__module_path }}/{{ zfs_tune__v_var_name }}
+  register: zfs_tune__v_var_result
+
+- name: update module vars
+  shell: >
+    echo {{ zfs_tune__v_var_value }} >{{ zfs_tune__module_path }}/{{ zfs_tune__v_var_name }}
+  when: zfs_tune__v_var_result.stdout != zfs_tune__v_var_value
