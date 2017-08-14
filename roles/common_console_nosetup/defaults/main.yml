@@ -1,0 +1,8 @@
+---
+common_console_nosetup__unwanted_packages:
+  console-setup:          true
+  console-setup-linux:    true
+  keyboard-configuration: true
+  kbd:                    true
+
+common_console_nosetup__grub_defaults_path: "{{ grub_defaults_path |default('/etc/default/grub') }}"

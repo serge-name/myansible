@@ -1,0 +1,2 @@
+---
+common_interfaces_nosystemd__grub_defaults_path: "{{ grub_defaults_path |default('/etc/default/grub') }}"
