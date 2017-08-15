@@ -1,0 +1,10 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=run fstrim daily
+
+[Timer]
+OnCalendar=*-*-* 4:15
+
+[Install]
+WantedBy=timers.target

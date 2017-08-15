@@ -1,0 +1,9 @@
+---
+- command: fstrim -v {{ common_fstrim__mount_to_try }}
+  changed_when: false
+  failed_when: false
+  register: common_fstrim__v_result
+
+- set_fact:
+    common_fstrim__supported: "{{ common_fstrim__supported | combine({common_fstrim__mount_to_try: true}) }}"
+  when: common_fstrim__v_result.rc == 0

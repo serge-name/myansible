@@ -1,0 +1,8 @@
+---
+- name: converge crontab entries
+  template:
+    src:   cron/fstrim.j2
+    dest:  /etc/cron.d/fstrim
+    owner: root
+    group: root
+    mode:  0644

@@ -1,0 +1,11 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=fstrim
+
+[Service]
+Type=oneshot
+{% for item,dummy in common_fstrim__supported.iteritems() %}
+ExecStart=/sbin/fstrim -v {{ item }}
+{% endfor %}
+User=root
