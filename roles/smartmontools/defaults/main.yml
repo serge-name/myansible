@@ -1,0 +1,3 @@
+---
+smartmontools__required_packages:
+  smartmontools: true

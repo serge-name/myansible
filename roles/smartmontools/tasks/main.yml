@@ -1,0 +1,18 @@
+---
+- block:
+    - name: install packages
+      apt:
+        name:  "{{ smartmontools__required_packages |to_package_list }}"
+        state: present
+
+    - name: converge smartd conf
+      template:
+        src:    smartd.conf.j2
+        dest:   /etc/smartd.conf
+        backup: yes
+        mode:   0644
+        owner:  root
+        group:  root
+      notify:
+        - restart smartd.service
+  when: ansible_virtualization_role == "host"

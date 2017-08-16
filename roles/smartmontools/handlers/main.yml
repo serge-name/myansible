@@ -1,0 +1,6 @@
+---
+- name: restart smartd.service
+  systemd:
+    unit: smartd.service
+    state: restarted
+    enabled: yes
