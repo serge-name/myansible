@@ -1,6 +1,7 @@
 ---
 - name: read a var
   command: cat {{ zfs_tune__module_path }}/{{ zfs_tune__v_var_name }}
+  changed_when: false
   register: zfs_tune__v_var_result
 
 - name: update module vars
