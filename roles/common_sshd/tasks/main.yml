@@ -1,0 +1,25 @@
+---
+- name: converge config
+  template:
+    src:    "sshd_config.{{ common_sshd__distro_string }}.j2"
+    dest:   "/etc/ssh/sshd_config"
+    backup: yes
+    mode:   0644
+    owner:  root
+    group:  root
+  notify:
+    - restart sshd
+
+- name: remove unsecure keys
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ common_sshd__dsa_key }}"
+    - "{{ common_sshd__dsa_key }}.pub"
+    - "{{ common_sshd__ecdsa_key }}"
+    - "{{ common_sshd__ecdsa_key }}.pub"
+
+- include: server_keys.yml
+  static: no
+  when: force_hostname is defined

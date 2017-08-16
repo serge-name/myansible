@@ -1,0 +1,33 @@
+---
+- name: check whether we need to regenerate RSA key
+  command: grep -q '@{{ force_hostname }}$' {{ common_sshd__rsa_key }}.pub
+  changed_when: false
+  failed_when: false
+  register: common_sshd__v_rsa_key_matches_hostname
+
+- name: regenerate RSA host key
+  script: regenerate_host_keys.sh rsa {{ common_sshd__rsa_key }}
+  when: common_sshd__v_rsa_key_matches_hostname.rc == 1
+  notify:
+    - restart sshd
+
+
+- name: check whether ED25519 keys supported
+  command: grep -qa ed25519 {{ common_sshd__binary_path }}
+  changed_when: false
+  failed_when: false
+  register: common_sshd__v_ed25519_support
+
+- block:
+    - name: check whether we need to regenerate ED25519 key
+      command: grep -q '@{{ force_hostname }}$' {{ common_sshd__ed25519_key }}.pub
+      changed_when: false
+      failed_when: false
+      register: common_sshd__v_ed25519_key_matches_hostname
+
+    - name: regenerate ED25519 host key
+      script: regenerate_host_keys.sh ed25519 {{ common_sshd__rsa_key }}
+      when: common_sshd__v_ed25519_key_matches_hostname.rc == 1
+      notify:
+        - restart sshd
+  when: common_sshd__v_ed25519_support.rc == 0

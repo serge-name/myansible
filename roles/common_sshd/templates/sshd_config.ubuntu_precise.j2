@@ -1,0 +1,31 @@
+# **** {{ ansible_managed }} ****
+
+# Fro Ubintu 12.04 LTS 'precise'
+
+Port 22
+{% if sshd_extra_port is defined %}
+Port {{ sshd_extra_port }}
+{% endif %}
+
+HostKey {{ common_sshd__rsa_key }}
+
+KexAlgorithms diffie-hellman-group-exchange-sha256
+Ciphers aes256-ctr,aes192-ctr,aes128-ctr
+MACs hmac-sha2-512,hmac-sha2-256
+
+LogLevel VERBOSE
+
+UsePrivilegeSeparation sandbox
+
+PermitRootLogin without-password
+AuthorizedKeysFile %h/.ssh/authorized_keys
+ChallengeResponseAuthentication no
+PasswordAuthentication {{ common_sshd__password_authentication }}
+AcceptEnv LANG LC_*
+Subsystem sftp /usr/lib/openssh/sftp-server
+UsePAM yes
+
+PrintMotd no
+DebianBanner no
+
+LoginGraceTime 30
