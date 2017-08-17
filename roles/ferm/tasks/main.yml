@@ -1,0 +1,4 @@
+---
+- include: ferm.yml
+  static: no
+  when: not (ferm__rules |is_empty)

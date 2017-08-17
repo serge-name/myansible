@@ -1,0 +1,7 @@
+---
+ferm__rules: ''
+
+ferm__required_packages:
+  ferm: true
+
+ferm__conf_path: '/etc/ferm/ferm.conf'

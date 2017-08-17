@@ -1,0 +1,32 @@
+- name: create ferm directory
+  file:
+    dest:  /etc/ferm
+    state: directory
+    mode:  0700
+    owner: root
+    group: root
+  when: ansible_distribution != 'CentOS'
+
+- name: install firewall rules
+  copy:
+    content: "{{ ferm__rules }}"
+    dest:    "{{ ferm__conf_path }}"
+    backup:  yes
+    mode:    0600
+    owner:   root
+    group:   root
+  notify: restart ferm.service
+
+- name: install packages
+  apt:
+    name: "{{ ferm__required_packages |to_package_list }}"
+    state: present
+  notify: restart ferm.service
+  when: ansible_pkg_mgr == 'apt'
+
+- name: install packages
+  yum:
+    name: "{{ ferm__required_packages |to_package_list }}"
+    state: present
+  notify: restart ferm.service
+  when: ansible_pkg_mgr == 'yum'
