@@ -1,4 +1,6 @@
 ---
+common_console_nosetup__play: "{{ (ansible_virtualization_type == 'kvm') and (ansible_virtualization_role == 'guest') }}"
+
 common_console_nosetup__unwanted_packages:
   console-setup:          true
   console-setup-linux:    true

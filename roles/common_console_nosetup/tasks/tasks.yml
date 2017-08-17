@@ -1,0 +1,28 @@
+---
+- block:
+    - name: remove packages
+      apt:
+        name: "{{ common_console_nosetup__unwanted_packages |to_package_list }}"
+        state: absent
+        purge: yes
+  when: ansible_distribution == 'Debian'
+
+- name: check grub defaults
+  shell: >
+    if [ -f {{ common_console_nosetup__grub_defaults_path }} ]; then
+      egrep 'GRUB_CMDLINE_LINUX(_DEFAULT)?=' {{ common_console_nosetup__grub_defaults_path }} |grep -q '[ "]nomodeset[ "]' ;
+    else
+      true ;
+    fi
+  changed_when: false
+  failed_when: false
+  register: common_console_nosetup__v_grub_defaults
+
+- name: update grub defaults
+  replace:
+    path: "{{ common_console_nosetup__grub_defaults_path }}"
+    regexp: '^(\s*)GRUB_CMDLINE_LINUX_DEFAULT="([^"]*)"(.*)$'
+    replace: '\1GRUB_CMDLINE_LINUX_DEFAULT="\2 nomodeset"\3'
+    backup: yes
+  when: common_console_nosetup__v_grub_defaults.rc != 0
+  notify: update-grub

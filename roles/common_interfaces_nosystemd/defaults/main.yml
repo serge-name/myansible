@@ -1,2 +1,4 @@
 ---
+common_interfaces_nosystemd__play: "{{ (ansible_virtualization_type == 'kvm') and (ansible_virtualization_role == 'guest') }}"
+
 common_interfaces_nosystemd__grub_defaults_path: "{{ grub_defaults_path |default('/etc/default/grub') }}"

@@ -1,22 +1,4 @@
 ---
-- block:
-    - name: check grub defaults
-      shell: >
-        if [ -f {{ common_interfaces_nosystemd__grub_defaults_path }} ]; then
-          egrep 'GRUB_CMDLINE_LINUX(_DEFAULT)?=' {{ common_interfaces_nosystemd__grub_defaults_path }} |egrep -q '[ "]net\.ifnames=[0-9]+[ "]' ;
-        else
-          true ;
-        fi
-      changed_when: false
-      failed_when: false
-      register: common_interfaces_nosystemd__v_grub_defaults
-
-    - name: update grub defaults
-      replace:
-        path: "{{ common_interfaces_nosystemd__grub_defaults_path }}"
-        regexp: '^(\s*)GRUB_CMDLINE_LINUX_DEFAULT="([^"]*)"(.*)$'
-        replace: '\1GRUB_CMDLINE_LINUX_DEFAULT="\2 net.ifnames=0"\3'
-        backup: yes
-      when: common_interfaces_nosystemd__v_grub_defaults.rc != 0
-      notify: update-grub
-  when: ansible_service_mgr == 'systemd'
+- include: tasks.yml
+  static: no
+  when: (common_interfaces_nosystemd__play == true) and (ansible_service_mgr == 'systemd')
