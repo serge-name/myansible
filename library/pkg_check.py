@@ -39,7 +39,8 @@ def main():
             name        = dict(type='str', required=True),
             op          = dict(type='str', required=False),
             version     = dict(type='str', required=False),
-        )
+        ),
+        supports_check_mode = True
     )
 
     name = module.params['name']

@@ -21,7 +21,8 @@ def main():
     module = AnsibleModule(
         argument_spec = dict(
             path = dict(type='str', required=False, default=SSHD_DEFAULT_PATH),
-        )
+        ),
+        supports_check_mode = True
     )
 
     path = module.params['path']
