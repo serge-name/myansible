@@ -1,6 +1,5 @@
 ---
 common_sshd__conf_dir: '/etc/ssh'
-common_sshd__binary_path: '/usr/sbin/sshd'
 
 common_sshd__rsa_key: "{{ common_sshd__conf_dir }}/ssh_host_rsa_key"
 common_sshd__ed25519_key: "{{ common_sshd__conf_dir }}/ssh_host_ed25519_key"
