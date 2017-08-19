@@ -11,6 +11,21 @@
     mode:  0700
   become_user: "{{ common_users__v_user }}"
 
+- block:
+    - proxmox_facts:
+      when: ansible_virtualization_role == 'host'
+
+    - name: read proxmox local SSH keys
+      shell: cat id_*.pub
+      args:
+        chdir: "{{ common_users__v_pw.pw.dir }}/.ssh"
+      failed_when: false
+      changed_when: false
+      become_user: "{{ common_users__v_user }}"
+      register: common_users__v_local_ssh_keys
+      when: not (proxmox_facts |default(None) |is_empty)
+  when: common_users__v_user == 'root'
+
 - name: converge authorized_keys for {{ item.key }}
   template:
     src:    authorized_keys.j2

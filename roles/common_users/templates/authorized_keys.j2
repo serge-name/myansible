@@ -6,3 +6,10 @@
 {{ common_users__key_list[user] | smart_join }}
 {%   endif %}
 {% endfor %}
+{% if common_users__v_user == 'root' and
+      common_users__v_local_ssh_keys is defined and
+      not (common_users__v_local_ssh_keys.stdout |is_empty) %}
+
+# ---- proxmox
+{{ common_users__v_local_ssh_keys.stdout }}
+{% endif %}
