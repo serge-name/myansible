@@ -1,0 +1,2 @@
+---
+proxmox_noenterprise__pm_path: '/usr/share/perl5/PVE/Cluster.pm'
