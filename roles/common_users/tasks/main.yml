@@ -18,15 +18,24 @@
     backup: yes
   when: (common_users__list.root is defined) and (common_users__list.root.password is defined)
 
-- name: converge user {{ item.key }}
+- name: converge user {{ item.key }} with a default home
   user:
     name:     "{{ item.key }}"
-    home:     "{{ item.value.home |default(None) }}"
     skeleton: "{{ item.value.skeleton |default('no') }}"
     system:   "{{ item.value.system |default('no') }}"
     password: "{{ item.value.password |default('*') }}"
   with_dict: "{{ common_users__list }}"
-  when: item.key != 'root'
+  when: (item.value.home is not defined) and (item.key != 'root')
+
+- name: converge user {{ item.key }} with a defined home
+  user:
+    name:     "{{ item.key }}"
+    home:     "{{ item.value.home }}"
+    skeleton: "{{ item.value.skeleton |default('no') }}"
+    system:   "{{ item.value.system |default('no') }}"
+    password: "{{ item.value.password |default('*') }}"
+  with_dict: "{{ common_users__list }}"
+  when: (item.value.home is defined) and (item.key != 'root')
 
 - include: user_ssh_keys.yml
   vars:
