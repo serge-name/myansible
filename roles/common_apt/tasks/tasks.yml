@@ -1,0 +1,62 @@
+---
+- name: update config
+  template:
+    src:   "apt.conf.j2"
+    dest:  "{{ common_apt__base_dir }}/apt.conf"
+    mode:  0644
+    owner: root
+    group: root
+
+- name: import apt keys for ubuntu
+  apt_key:
+    data: "{{ lookup('file', item) }}"
+  with_items:
+    - debian/debian_7_wheezy_8B48AD6246925553.key
+    - debian/debian_8_jessie_7638D0442B90D010.key
+    - ubuntu_extras_16126D3A3E5C1192.key
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '12.04'
+
+- name: converge sources.list
+  template:
+    src:    "sources.list.{{ ansible_distribution |lower }}.j2"
+    dest:   "{{ common_apt__base_dir }}/sources.list"
+    backup: yes
+    mode:   0644
+    owner:  root
+    group:  root
+
+- name: add keys for extra repos
+  apt_key:
+    data: "{{ lookup('file', item.value.key) }}"
+  when: item.value.install == true
+  with_dict: "{{ common_apt__extra_repos }}"
+
+- name: add extra repos
+  include: add_repo.yml
+  vars:
+    common_apt_v__repo_lines: "{{ common_apt__v_extra_repos_loop.value.lines }}"
+  when: common_apt__v_extra_repos_loop.value.install == true
+  with_dict: "{{ common_apt__extra_repos }}"
+  loop_control:
+    loop_var: common_apt__v_extra_repos_loop
+
+- name: check whether anything has been changed
+  shell: find sources.list* -type f -mmin -1
+  args:
+    chdir: "{{ common_apt__base_dir }}"
+  changed_when: false
+  register: common_apt__v_changed_repos
+
+- name: update cache
+  apt:
+    update_cache: yes
+  when: not (common_apt__v_changed_repos.stdout |is_empty)
+
+- name: converge preferences
+  template:
+    src:    preferences.j2
+    dest:   "{{ common_apt__base_dir }}/preferences"
+    backup: yes
+    mode:   0644
+    owner:  root
+    group:  root

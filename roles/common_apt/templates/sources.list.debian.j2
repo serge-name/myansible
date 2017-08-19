@@ -1,0 +1,7 @@
+# **** {{ ansible_managed }} ****
+
+deb http://{{ common_apt__mirror_debian }}/debian/ {{ ansible_distribution_release }}                  main contrib non-free
+deb http://{{ common_apt__mirror_debian }}/debian/ {{ ansible_distribution_release }}-updates          main contrib non-free
+deb http://{{ common_apt__mirror_debian }}/debian/ {{ ansible_distribution_release }}-proposed-updates main contrib non-free
+deb http://{{ common_apt__mirror_debian }}/debian/ {{ ansible_distribution_release }}-backports        main contrib non-free
+deb http://security.debian.org/ {{ ansible_distribution_release }}/updates main contrib non-free

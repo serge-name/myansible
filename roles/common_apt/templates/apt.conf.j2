@@ -1,0 +1,10 @@
+# **** {{ ansible_managed }} ****
+
+Acquire::Languages "none";
+
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::MaxAge "3";
+
+aptitude::UI::Advance-On-Action "true";
+aptitude::UI::Prompt-On-Exit "false";
+aptitude::UI::Menubar-Autohide "true";

@@ -1,0 +1,6 @@
+---
+- name: add repo
+  apt_repository:
+    repo: "{{ item }}"
+    update_cache: yes
+  with_items: "{{ common_apt_v__repo_lines }}"

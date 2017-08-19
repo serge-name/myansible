@@ -1,0 +1,4 @@
+---
+- include: tasks.yml
+  static: no
+  when: ansible_pkg_mgr == 'apt'
