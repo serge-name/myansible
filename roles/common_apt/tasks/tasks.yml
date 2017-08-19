@@ -3,6 +3,7 @@
   template:
     src:   "apt.conf.j2"
     dest:  "{{ common_apt__base_dir }}/apt.conf"
+    backup: yes
     mode:  0644
     owner: root
     group: root
