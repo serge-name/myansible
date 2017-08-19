@@ -1,0 +1,8 @@
+# **** {{ ansible_managed }} ****
+{% for user, permission in common_users__v_ssh_keys.iteritems() %}
+{%   if permission and common_users__key_list[user] is defined %}
+
+# ---- {{ user }}
+{{ common_users__key_list[user] | smart_join }}
+{%   endif %}
+{% endfor %}

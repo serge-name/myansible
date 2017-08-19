@@ -1,0 +1,6 @@
+---
+# list of users to converge
+common_users__list: {}
+
+# list of all known SSH keys
+common_users__key_list: {}

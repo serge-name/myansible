@@ -1,0 +1,20 @@
+---
+- name: "get {{ common_users__v_user }}'s pw"
+  get_pw:
+    user: "{{ common_users__v_user }}"
+  register: common_users__v_pw
+
+- name: create ~{{ common_users__v_user }}/.ssh/
+  file:
+    path:  "{{ common_users__v_pw.pw.dir }}/.ssh"
+    state: directory
+    mode:  0700
+  become_user: "{{ common_users__v_user }}"
+
+- name: converge authorized_keys for {{ item.key }}
+  template:
+    src:    authorized_keys.j2
+    dest:   "{{ common_users__v_pw.pw.dir }}/.ssh/authorized_keys"
+    backup: yes
+    mode:   0600
+  become_user: "{{ common_users__v_user }}"
