@@ -17,7 +17,7 @@
   lineinfile:
     dest: "{{ item }}"
     regexp: "^ *PS1="
-    line: "PS1='${debian_chroot:+($debian_chroot)}\u@${debian_fqdn}:\w\$ '"
+    line: "PS1='${debian_chroot:+($debian_chroot)}\\u@${debian_fqdn}:\\w\\$ '"
   ignore_errors: true
   with_items:
     - /etc/bash.bashrc
