@@ -38,7 +38,7 @@
   copy:
     content: "{{ force_hostname }}.{{ force_domain }}\n"
     dest:    /etc/mailname
-    backup:  no
+    backup:  yes
     mode:    0644
     owner:   root
     group:   root

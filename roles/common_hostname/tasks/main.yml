@@ -8,6 +8,7 @@
     dest: "{{ item }}"
     insertafter: "^# set a fancy prompt"
     line: "debian_fqdn=`hostname -f`"
+    backup: yes
   ignore_errors: true
   with_items:
     - /etc/bash.bashrc
@@ -18,6 +19,7 @@
     dest: "{{ item }}"
     regexp: "^ *PS1="
     line: "PS1='${debian_chroot:+($debian_chroot)}\\u@${debian_fqdn}:\\w\\$ '"
+    backup: yes
   ignore_errors: true
   with_items:
     - /etc/bash.bashrc
