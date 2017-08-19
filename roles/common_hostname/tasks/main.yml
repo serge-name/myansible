@@ -1,0 +1,24 @@
+---
+- include: tune_hostname.yml
+  static: no
+  when: force_hostname is defined
+
+- name: define hostname_fqdn
+  lineinfile:
+    dest: "{{ item }}"
+    insertafter: "^# set a fancy prompt"
+    line: "debian_fqdn=`hostname -f`"
+  ignore_errors: true
+  with_items:
+    - /etc/bash.bashrc
+    - /root/.bashrc
+
+- name: use hostname_fqdn in PS1
+  lineinfile:
+    dest: "{{ item }}"
+    regexp: "^ *PS1="
+    line: "PS1='${debian_chroot:+($debian_chroot)}\u@${debian_fqdn}:\w\$ '"
+  ignore_errors: true
+  with_items:
+    - /etc/bash.bashrc
+    - /root/.bashrc

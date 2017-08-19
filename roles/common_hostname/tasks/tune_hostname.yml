@@ -1,0 +1,44 @@
+---
+- name: set hostname
+  hostname:
+    name: "{{ force_hostname }}"
+  when: ansible_virtualization_type != 'lxc'
+
+- proxmox_facts:
+  when: ansible_virtualization_role == 'host'
+
+- block:
+    - name: update /etc/hosts
+      lineinfile:
+        dest:   /etc/hosts
+        backup: yes
+        state:  present
+        regexp: "{{ item.rx }}"
+        line:   "{{ item.line }}"
+      with_items:
+        - { rx: "^(?P<head>127\\.0\\.1\\.1)[ \\t]+",
+            line: "127.0.1.1\t{{ force_hostname |default('') }}.{{ force_domain |default('tld') }} {{ force_hostname |default('') }}"
+          }
+        - { rx: "^(?P<head>127\\.0\\.0\\.1)[ \\t]+",
+            line: "127.0.0.1\tlocalhost"
+          }
+
+    - name: "remove /etc/hosts entries for this host's IPs"
+      lineinfile:
+        dest:   /etc/hosts
+        backup: yes
+        state:  absent
+        regexp: "^{{ item | re_escape }}[ \t]+[^ \t]+[ \t]+[^ \t]+"
+      with_items: "{{ ansible_all_ipv4_addresses }}"
+  rescue:
+    - debug: msg="it looks like 'chattr +i /etc/hosts' has been made, skipping"
+  when: (ansible_virtualization_type != 'lxc') and not (common_hostname__skip_etc_hosts |bool) and (proxmox_facts |default(None) |is_empty)
+
+- name: converge mailname
+  copy:
+    content: "{{ force_hostname }}.{{ force_domain }}\n"
+    dest:    /etc/mailname
+    backup:  no
+    mode:    0644
+    owner:   root
+    group:   root
