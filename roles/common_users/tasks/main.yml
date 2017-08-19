@@ -9,6 +9,15 @@
   when: item.value.home is defined
   with_dict: "{{ common_users__list }}"
 
+# if we try to set password with 'user' module we get error 'usermod: user root is currently used by process 1'
+- name: "set up root's password"
+  replace:
+    path: /etc/shadow
+    regexp: "^(root:)[^:]*(:.*)$"
+    replace: "\\1{{ common_users__list.root.password }}\\2"
+    backup: yes
+  when: (common_users__list.root is defined) and (common_users__list.root.password is defined)
+
 - name: converge user {{ item.key }}
   user:
     name:     "{{ item.key }}"
@@ -17,6 +26,7 @@
     system:   "{{ item.value.system |default('no') }}"
     password: "{{ item.value.password |default('*') }}"
   with_dict: "{{ common_users__list }}"
+  when: item.key != 'root'
 
 - include: user_ssh_keys.yml
   vars:
