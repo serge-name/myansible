@@ -1,0 +1,10 @@
+---
+- name: "don't clean console on boot"
+  copy:
+    src:  getty@tty1.service.d/
+    dest: "{{ common_console_noclean__base_dir }}/system/getty@tty1.service.d/"
+    owner: root
+    group: root
+    mode:  0644
+    directory_mode: 0755
+  when: ansible_service_mgr == 'systemd' and ansible_virtualization_type != 'lxc'
