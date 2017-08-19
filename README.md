@@ -7,7 +7,7 @@
    # …
    roles_path = ./_myansible/roles
    library = ./_myansible/library
-   filter_plugins = ./_myansible/filter_plugins</pre>
+   filter_plugins = ./_myansible/filter_plugins
    #
    hash_behaviour = merge
    remote_user = root
