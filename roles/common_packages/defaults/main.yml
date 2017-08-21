@@ -1,0 +1,147 @@
+---
+common_packages__want_nfs_client: false
+common_packages__want_nfs_server: false
+common_packages__want_cifs_client: false
+
+common_packages__wanted:
+  common:
+    condition: true
+    packages:
+      # usefull
+      pv:                   true
+      tree:                 true
+      zsh:                  true
+      mc:                   true
+      vim-nox:              true
+      most:                 true
+      unzip:                true
+      sudo:                 true
+
+      # system
+      acpid:                true
+      strace:               true
+      binutils:             true
+      iotop:                true
+      htop:                 true
+      psmisc:               true
+
+      # development
+      git:                  true
+      tig:                  true
+      diffstat:             true
+
+      # network
+      netcat-openbsd:       true
+      tcpdump:              true
+      mtr-tiny:             true
+      ngrep:                true
+      fping:                true
+      curl:                 true
+      bind9-host:           true
+      rsync:                true
+      conntrack:            true
+      net-tools:            true
+      ca-certificates:      true
+
+      # packages
+      apt-transport-https:  true
+      aptitude:             true
+      debconf-utils:        true
+
+      # for LXC built from debootstrap
+      iputils-ping:         true
+      less:                 true
+
+  debian8:
+    condition: "{{ ansible_distribution_release == 'jessie' }}"
+    packages:
+      pinentry-curses:      true
+
+  systemd:
+    condition: "{{ ansible_service_mgr == 'systemd' }}"
+    packages:
+      libpam-systemd:       true
+
+  hardware:
+    condition: "{{ ansible_virtualization_role == 'host' }}"
+    packages:
+      ethtool:              true
+      parted:               true
+      bridge-utils:         true
+
+  vm_kvm:
+    condition: "{{ (ansible_virtualization_type == 'kvm') and (ansible_virtualization_role == 'guest') and (ansible_distribution == 'Debian') }}"
+    packages:
+      qemu-guest-agent:     true
+
+  nfs_client:
+    condition: "{{ (common_packages__want_nfs_client) }}"
+    packages:
+      nfs-client:           true
+
+  nfs_server:
+    condition: "{{ (common_packages__want_nfs_server) }}"
+    packages:
+      nfs-server:           true
+
+  cifs_client:
+    condition: "{{ (common_packages__want_cifs_client) }}"
+    packages:
+      cifs-utils:           true
+
+common_packages__unwanted:
+  common:
+    condition: true
+    packages:
+      xauth:                true
+      rdnssd:               true
+      os-prober:            true
+
+  debian:
+    condition: "{{ ansible_distribution == 'Debian' }}"
+    packages:
+      pinentry-gtk2:        true
+      laptop-detect:        true
+      reportbug:            true
+      python-reportbug:     true
+      whoopsie:             true
+      host:                 true
+      eject:                true
+      vim-tiny:             true
+
+  ubuntu1604:
+    condition: "{{ ansible_distribution_release == 'xenial' }}"
+    packages:
+      lxd:                  true
+      lxd-client:           true
+      liblxc1:              true
+      lxc-common:           true
+      lxcfs:                true
+      ufw:                  true
+
+  nfs:
+    condition: "{{ (not common_packages__want_nfs_client) and (not common_packages__want_nfs_server) }}"
+    packages:
+      nfs-common:           true
+      rpcbind:              true
+      nfs-kernel-server:    true
+
+  selectel:
+    condition: true
+    packages:
+      scarlet-init:         true
+      cloud-init:           true
+      cloud-utils:          true
+
+common_packages__want_latest_kernel: true
+common_packages__latest_kernel:
+  ubuntu1204:
+    condition: "{{ ansible_distribution_release == 'precise' }}"
+    packages:
+      linux-image-generic-lts-trusty:   true
+      linux-headers-generic-lts-trusty: true
+
+  debian8:
+    condition: "{{ ansible_distribution == 'Debian' }}"
+    packages:
+      linux-image-amd64: true

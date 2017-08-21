@@ -1,0 +1,17 @@
+- name: apt-get upgrade
+  shell: "apt-get update && apt-get -y upgrade"
+  register: common_packages__v_upgrade_result
+  changed_when: (common_packages__v_upgrade_result.stdout_lines |last) != '0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.'
+
+- proxmox_facts:
+  when: ansible_virtualization_role == 'host'
+
+- block:
+    - name: install latest kernel
+      apt:
+        name:  "{{ item.value.packages |to_package_list }}"
+        state: present
+      when: item.value.condition == true
+      with_dict: "{{ common_packages__latest_kernel }}"
+
+  when: common_packages__want_latest_kernel and (ansible_virtualization_type != 'lxc') and (proxmox_facts |default(None) |is_empty)

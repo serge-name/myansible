@@ -1,0 +1,24 @@
+- name: install wanted packages
+  apt:
+    name:  "{{ item.value.packages | to_package_list }}"
+    state: present
+    install_recommends: no
+  when: item.value.condition == true
+  with_dict: "{{ common_packages__wanted }}"
+
+- name: remove unwanted packages
+  apt:
+    name:  "{{ item.value.packages | to_package_list }}"
+    state: absent
+    purge: yes
+  when: item.value.condition == true
+  with_dict: "{{ common_packages__unwanted }}"
+
+- name: remove crontask (selectel shit)
+  file:
+    path:  /etc/cron.d/scarlet-init
+    state: absent
+
+- name: do something only on very first run
+  include: on_very_first_run.yml
+  when: (ansible_local |attr_or_default('ansible_first_run', false))
