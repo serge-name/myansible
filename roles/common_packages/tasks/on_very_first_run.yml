@@ -1,10 +1,8 @@
+---
 - name: apt-get upgrade
   shell: "apt-get update && apt-get -y upgrade"
   register: common_packages__v_upgrade_result
   changed_when: (common_packages__v_upgrade_result.stdout_lines |last) != '0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.'
-
-- proxmox_facts:
-  when: ansible_virtualization_role == 'host'
 
 - block:
     - name: install latest kernel

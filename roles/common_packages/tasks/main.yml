@@ -1,3 +1,7 @@
+---
+- proxmox_facts:
+  when: ansible_virtualization_role == 'host'
+
 - name: install wanted packages
   apt:
     name:  "{{ item.value.packages | to_package_list }}"

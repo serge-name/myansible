@@ -31,7 +31,6 @@ common_packages__wanted:
       diffstat:             true
 
       # network
-      netcat-openbsd:       true
       tcpdump:              true
       mtr-tiny:             true
       ngrep:                true
@@ -51,6 +50,11 @@ common_packages__wanted:
       # for LXC built from debootstrap
       iputils-ping:         true
       less:                 true
+
+  netcat:
+    condition: "{{ proxmox_facts |default(None) |is_empty }}"
+    packages:
+      netcat-openbsd:       true
 
   debian8:
     condition: "{{ ansible_distribution_release == 'jessie' }}"
