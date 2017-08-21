@@ -1,0 +1,19 @@
+---
+- name: install locale
+  apt:
+    name: "{{ common_locale__required_packages |to_package_list }}"
+
+- name: converge locales
+  locale_gen:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ common_locale__required_locales }}"
+
+- name: get current locale
+  shell: . /etc/default/locale; echo $LANG
+  register: common_locale__v_current_locale
+  changed_when: false
+
+- name: converge default locale
+  command: update-locale LANG={{ common_locale__default }}
+  when: common_locale__v_current_locale.stdout != common_locale__default
