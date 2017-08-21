@@ -1,0 +1,14 @@
+---
+- name: converge timezone
+  copy:
+    content: "{{ common_timezone__string }}\n"
+    dest:    /etc/timezone
+    backup:  no
+    owner:   root
+    group:   root
+    mode:    0644
+  register: common_timezone__v_file
+
+- name: reconfigure tzdata
+  command: dpkg-reconfigure --frontend=noninteractive --priority=critical tzdata
+  when: common_timezone__v_file.changed

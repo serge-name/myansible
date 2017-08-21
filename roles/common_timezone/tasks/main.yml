@@ -1,0 +1,4 @@
+---
+- include: tasks.yml
+  static: no
+  when: common_timezone__string is defined
