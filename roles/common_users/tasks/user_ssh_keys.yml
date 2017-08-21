@@ -23,7 +23,7 @@
       changed_when: false
       become_user: "{{ common_users__v_user }}"
       register: common_users__v_local_ssh_keys
-      when: not (proxmox_facts |default(None) |is_empty)
+      when: not (proxmox_facts |is_empty_or_undefined)
   when: common_users__v_user == 'root'
 
 - name: converge authorized_keys for {{ item.key }}

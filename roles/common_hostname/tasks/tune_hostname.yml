@@ -32,7 +32,7 @@
       with_items: "{{ ansible_all_ipv4_addresses }}"
   rescue:
     - debug: msg="it looks like 'chattr +i /etc/hosts' has been made, skipping"
-  when: (ansible_virtualization_type != 'lxc') and not (common_hostname__skip_etc_hosts |bool) and (proxmox_facts |default(None) |is_empty)
+  when: (ansible_virtualization_type != 'lxc') and not (common_hostname__skip_etc_hosts |bool) and (proxmox_facts |is_empty_or_undefined)
 
 - name: converge mailname
   copy:

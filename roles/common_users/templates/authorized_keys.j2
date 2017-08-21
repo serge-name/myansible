@@ -8,7 +8,7 @@
 {% endfor %}
 {% if common_users__v_user == 'root' and
       common_users__v_local_ssh_keys is defined and
-      not (common_users__v_local_ssh_keys.stdout |default('') |is_empty) %}
+      not (common_users__v_local_ssh_keys.stdout |is_empty_or_undefined) %}
 
 # ---- proxmox
 {{ common_users__v_local_ssh_keys.stdout }}

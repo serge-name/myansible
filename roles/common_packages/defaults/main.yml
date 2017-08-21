@@ -52,7 +52,7 @@ common_packages__wanted:
       less:                 true
 
   netcat:
-    condition: "{{ proxmox_facts |default(None) |is_empty }}"
+    condition: "{{ proxmox_facts |is_empty_or_undefined }}"
     packages:
       netcat-openbsd:       true
 
@@ -124,7 +124,7 @@ common_packages__unwanted:
       ufw:                  true
 
   nfs:
-    condition: "{{ (not common_packages__want_nfs_client) and (not common_packages__want_nfs_server) and (proxmox_facts |default(None) |is_empty) }}"
+    condition: "{{ (not common_packages__want_nfs_client) and (not common_packages__want_nfs_server) and (proxmox_facts |is_empty_or_undefined) }}"
     packages:
       nfs-common:           true
       rpcbind:              true
