@@ -10,9 +10,10 @@ import os
 def mkdir_p(path):
     try:
         os.makedirs(path)
+        return True
     except OSError as exc:
         if exc.errno == errno.EEXIST and os.path.isdir(path):
-            pass
+            return False
         else:
             raise
 
@@ -24,16 +25,14 @@ def main():
         supports_check_mode = True
     )
 
-    if not module.check_mode:
-        mkdir_p(ASNIBLE_FACTS_PATH)
 
-    fact = os.path.join(ASNIBLE_FACTS_PATH, "{}.fact".format(FACT_NAME))
-
-    changed = False
+    changed = False if module.check_mode else mkdir_p(ASNIBLE_FACTS_PATH)
+    fact_path = os.path.join(ASNIBLE_FACTS_PATH, "{}.fact".format(FACT_NAME))
     ansible_facts = {}
-    if not os.path.isfile(fact):
+
+    if not os.path.isfile(fact_path):
         if not module.check_mode:
-            f = open(fact, 'w')
+            f = open(fact_path, 'w')
             f.write("false\n")
             f.close()
         changed = True
