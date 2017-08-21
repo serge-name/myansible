@@ -1,6 +1,6 @@
 - name: create ferm directory
   file:
-    dest:  /etc/ferm
+    dest:  "{{ ferm__conf_path |dirname }}"
     state: directory
     mode:  0700
     owner: root
