@@ -1,5 +1,19 @@
 ---
-- name: converge timezone
+- name: install tzdata
+  apt:
+    name: tzdata
+
+- name: check whether we need to update timezone info file
+  command: "cmp /usr/share/zoneinfo/{{ common_timezone__string }} /etc/localtime"
+  register: common_timezone__v_zoneinfo_cmp
+  failed_when: (common_timezone__v_zoneinfo_cmp.msg is defined) or (common_timezone__v_zoneinfo_cmp.rc >= 2)
+  changed_when: false
+
+- name: copy timezone DB
+  shell: "rm -f /etc/localtime && cp --preserve=mode,timestamps --force /usr/share/zoneinfo/{{ common_timezone__string }} /etc/localtime"
+  when: common_timezone__v_zoneinfo_cmp.rc == 1
+
+- name: converge timezone config
   copy:
     content: "{{ common_timezone__string }}\n"
     dest:    /etc/timezone
@@ -7,8 +21,18 @@
     owner:   root
     group:   root
     mode:    0644
-  register: common_timezone__v_file
+  register: common_timezone__v_timezone_file
 
-- name: reconfigure tzdata
-  command: dpkg-reconfigure --frontend=noninteractive --priority=critical tzdata
-  when: common_timezone__v_file.changed
+- name: set debconf tzdata area
+  debconf:
+    name:     tzdata
+    question: tzdata/Areas
+    value:    "{{ common_timezone__string |split('/') |first }}"
+    vtype:    select
+
+- name: set debconf tzdata zone
+  debconf:
+    name:     tzdata
+    question: "tzdata/Areas/{{ common_timezone__string |split('/') |first }}"
+    value:    "{{ common_timezone__string |split('/') |second }}"
+    vtype:    select
