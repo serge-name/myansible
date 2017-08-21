@@ -19,26 +19,33 @@ def mkdir_p(path):
 
 
 def main():
+    def write_to_file(path, string):
+        f = open(path, 'w')
+        f.write(string)
+        f.close()
+
     module = AnsibleModule(
         argument_spec = dict(
+            phase = dict(default='single', choices=['single','pre','post']),
         ),
         supports_check_mode = True
     )
 
+    args = {}
+    fact_path = os.path.join(ASNIBLE_FACTS_PATH, "{}.fact".format(FACT_NAME))
 
     changed = False if module.check_mode else mkdir_p(ASNIBLE_FACTS_PATH)
-    fact_path = os.path.join(ASNIBLE_FACTS_PATH, "{}.fact".format(FACT_NAME))
-    ansible_facts = {}
 
     if not os.path.isfile(fact_path):
-        if not module.check_mode:
-            f = open(fact_path, 'w')
-            f.write("false\n")
-            f.close()
-        changed = True
-        ansible_facts = { 'ansible_local': { FACT_NAME: True } }
+        if module.params['phase'] != 'pre':
+            if not module.check_mode:
+                write_to_file(fact_path, "false\n")
+            changed = True
+        args['ansible_facts'] = { 'ansible_local': { FACT_NAME: True } }
 
-    module.exit_json(changed=changed, ansible_facts=ansible_facts)
+    args['changed'] = changed
+
+    module.exit_json(**args)
 
 
 from ansible.module_utils.basic import AnsibleModule
