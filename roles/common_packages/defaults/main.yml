@@ -124,7 +124,7 @@ common_packages__unwanted:
       ufw:                  true
 
   nfs:
-    condition: "{{ (not common_packages__want_nfs_client) and (not common_packages__want_nfs_server) }}"
+    condition: "{{ (not common_packages__want_nfs_client) and (not common_packages__want_nfs_server) and (proxmox_facts |default(None) |is_empty) }}"
     packages:
       nfs-common:           true
       rpcbind:              true
