@@ -2,19 +2,7 @@
 
 PROXMOX_PKG_NAME = 'proxmox-ve'
 
-import commands
-
-def get_pkg_status(package):
-    _, status = commands.getstatusoutput("dpkg-query  --show --showformat='${{Status}}' '{}' 2>/dev/null".format(package))
-
-    return (status == 'install ok installed')
-
-
-def get_pkg_version(package):
-    _, version = commands.getstatusoutput("dpkg-query  --show --showformat='${{Version}}' '{}' 2>/dev/null".format(package))
-
-    return version
-
+from ansible.module_utils import dpkg
 
 def main():
     module = AnsibleModule(
@@ -25,8 +13,8 @@ def main():
 
     facts = {}
 
-    if get_pkg_status(PROXMOX_PKG_NAME):
-        version = get_pkg_version(PROXMOX_PKG_NAME)
+    if dpkg.get_pkg_status(PROXMOX_PKG_NAME):
+        version = dpkg.get_pkg_version(PROXMOX_PKG_NAME)
         facts['pve_major_version'] = version.split('.')[0]
         facts['pve_version'] = version
 

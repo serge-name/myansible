@@ -16,22 +16,7 @@
 
 # FIXME: use https://github.com/theclimatecorporation/python-dpkg
 
-import commands
-
-def get_pkg_status(package):
-    _, status = commands.getstatusoutput("dpkg-query  --show --showformat='${{Status}}' '{}' 2>/dev/null".format(package))
-
-    return (status == 'install ok installed')
-
-def get_pkg_version(package):
-    _, version = commands.getstatusoutput("dpkg-query  --show --showformat='${{Version}}' '{}' 2>/dev/null".format(package))
-
-    return version
-
-def do_compare_versions(ver1, op, ver2):
-    status, _ = commands.getstatusoutput("dpkg --compare-versions '{}' {} '{}'".format(ver1, op, ver2))
-
-    return not bool(status)
+from ansible.module_utils import dpkg
 
 def main():
     module = AnsibleModule(
@@ -45,14 +30,14 @@ def main():
 
     name = module.params['name']
 
-    installed = get_pkg_status(name)
+    installed = dpkg.get_pkg_status(name)
 
     op = module.params['op']
     reference_version = module.params['version']
     if bool(op) ^ bool(reference_version):
         module.exit_json(msg="use both op= and version=", failed=True)
 
-    actual_version = get_pkg_version(name)
+    actual_version = dpkg.get_pkg_version(name)
 
     args = { 'msg': 'OK', 'changed': False }
 
@@ -66,7 +51,7 @@ def main():
     else:
         args['installed'] = True
         args['version'] = actual_version
-        args['result'] = do_compare_versions(actual_version, op, reference_version)
+        args['result'] = dpkg.do_compare_versions(actual_version, op, reference_version)
 
     module.exit_json(**args)
 
