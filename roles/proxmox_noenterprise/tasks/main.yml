@@ -1,8 +1,11 @@
 ---
 - name: remove repo
   apt_repository:
-    repo: "deb https://enterprise.proxmox.com/debian/pve {{ ansible_distribution_release }} pve-enterprise"
+    repo: "deb {{ item }} {{ ansible_distribution_release }} pve-enterprise"
     state: absent
+  with_items:
+    - 'https://enterprise.proxmox.com/debian/pve'
+    - 'https://enterprise.proxmox.com/debian'
 
 - name: check pve-manager version
   pkg_check:
