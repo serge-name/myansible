@@ -23,7 +23,7 @@
       register: common_sshd__v_ed25519_key_matches_hostname
 
     - name: regenerate ED25519 host key
-      script: regenerate_host_keys.sh ed25519 {{ common_sshd__rsa_key }}
+      script: regenerate_host_keys.sh ed25519 {{ common_sshd__ed25519_key }}
       when: common_sshd__v_ed25519_key_matches_hostname.rc == 1
       notify:
         - restart sshd
