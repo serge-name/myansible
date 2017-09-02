@@ -50,6 +50,7 @@ common_packages__wanted:
       # for LXC built from debootstrap
       iputils-ping:         true
       less:                 true
+      man-db:               true
 
   netcat:
     condition: "{{ proxmox_facts |is_empty_or_undefined }}"
