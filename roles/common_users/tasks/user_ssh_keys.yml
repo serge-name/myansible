@@ -32,5 +32,4 @@
     dest:   "{{ common_users__v_pw.pw.dir }}/.ssh/authorized_keys"
     backup: yes
     mode:   0600
-    validate: visudo -cf %s
   become_user: "{{ common_users__v_user }}"

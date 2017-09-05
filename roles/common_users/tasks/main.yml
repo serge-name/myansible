@@ -52,5 +52,6 @@
     mode:   0440
     owner:  root
     group:  root
+    validate: visudo -cf %s
   when: item.value.sudo_lines is defined
   with_dict: "{{ common_users__list }}"
