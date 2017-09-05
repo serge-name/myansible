@@ -1,0 +1,5 @@
+# **** {{ ansible_managed }} ****
+
+{% for line in (item.value.sudo_lines |to_list) %}
+{{ item.key }}    {{ line }}
+{% endfor %}

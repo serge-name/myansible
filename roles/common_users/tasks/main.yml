@@ -43,3 +43,14 @@
     common_users__v_ssh_keys: "{{ item.value.authorized_keys }}"
   when: item.value.authorized_keys is defined
   with_dict: "{{ common_users__list }}"
+
+- name: converge sudo lines for for {{ item.key }}
+  template:
+    src:    sudoers_user.j2
+    dest:   "/etc/sudoers.d/{{ item.key }}"
+    backup: yes
+    mode:   0440
+    owner:  root
+    group:  root
+  when: item.value.sudo_lines is defined
+  with_dict: "{{ common_users__list }}"
