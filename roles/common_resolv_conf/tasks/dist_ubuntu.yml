@@ -1,0 +1,9 @@
+---
+- name: disable REPORT_ABSENT_SYMLINK
+  template:
+    src:    default.resolvconf.j2
+    dest:   /etc/default/resolvconf
+    backup: yes
+    owner:  root
+    group:  root
+    mode:   0644

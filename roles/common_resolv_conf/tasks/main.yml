@@ -1,0 +1,43 @@
+---
+- include: dist_{{ ansible_distribution |lower }}.yml
+  static: no
+
+- name: check whether resolv.conf if a symlink
+  stat:
+    path: /etc/resolv.conf
+  register: common_resolv_conf__v_stat
+
+- name: remove resolv.conf if it is a symlink
+  file:
+    state: absent
+    path:  /etc/resolv.conf
+  when: common_resolv_conf__v_stat.stat.islnk
+
+- name: update resolv.conf
+  template:
+    src:    resolv.conf.j2
+    dest:   /etc/resolv.conf
+    follow: no
+    backup: yes
+    owner:  root
+    group:  root
+    mode:   0644
+
+- name: create dhclient hook dir
+  file:
+    state: directory
+    path:  /etc/dhcp/dhclient-enter-hooks.d
+    owner: root
+    group: root
+    mode:  0755
+
+# on Ubuntu we can not remove resolvconf since it depend on ubuntu-minimal
+# so are we making an universal solution for boch Debian and Ubuntu
+- name: create dhclient hook
+  template:
+    src:    nodnsupdate.j2
+    dest:   /etc/dhcp/dhclient-enter-hooks.d/zzzzz_nodnsupdate
+    backup: yes
+    owner: root
+    group: root
+    mode:  0755

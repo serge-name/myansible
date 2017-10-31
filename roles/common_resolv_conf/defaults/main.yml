@@ -1,0 +1,8 @@
+---
+# use OpenNIC by default
+common_resolv_conf__nameservers:
+  # FIXME:
+  #   - use region based NS (https://servers.opennicproject.org/)
+  #   - add IPv6 NS too (https://wiki.opennic.org/start)
+  - 185.121.177.177
+  - 169.239.202.202

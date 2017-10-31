@@ -1,0 +1,6 @@
+---
+- name: get rid of resolvconf
+  apt:
+    name:  resolvconf
+    state: absent
+    purge: yes
