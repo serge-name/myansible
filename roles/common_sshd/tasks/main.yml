@@ -22,4 +22,4 @@
 
 - include: server_keys.yml
   static: no
-  when: force_hostname is defined
+  when: force_hostname is defined and (ansible_virtualization_role != 'guest' or ansible_virtualization_type != 'lxc')
