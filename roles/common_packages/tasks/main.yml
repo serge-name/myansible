@@ -18,11 +18,6 @@
   when: item.value.condition == true
   with_dict: "{{ common_packages__unwanted }}"
 
-- name: remove crontask (selectel shit)
-  file:
-    path:  /etc/cron.d/scarlet-init
-    state: absent
-
 - name: do something only on very first run
   include: on_very_first_run.yml
   when: (ansible_local |attr_or_default('ansible_first_run', false))

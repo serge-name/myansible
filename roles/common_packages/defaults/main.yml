@@ -131,13 +131,6 @@ common_packages__unwanted:
       rpcbind:              true
       nfs-kernel-server:    true
 
-  selectel:
-    condition: true
-    packages:
-      scarlet-init:         true
-      cloud-init:           true
-      cloud-utils:          true
-
 common_packages__want_latest_kernel: true
 common_packages__latest_kernel:
   ubuntu1204:
