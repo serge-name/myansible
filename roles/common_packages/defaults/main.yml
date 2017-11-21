@@ -123,6 +123,8 @@ common_packages__unwanted:
       lxc-common:           true
       lxcfs:                true
       ufw:                  true
+      plymouth-theme-ubuntu-text: true
+      plymouth:                   true
 
   nfs:
     condition: "{{ (not common_packages__want_nfs_client) and (not common_packages__want_nfs_server) and (proxmox_facts |is_empty_or_undefined) }}"
