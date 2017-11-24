@@ -27,6 +27,14 @@
   with_dict: "{{ common_users__list }}"
   when: (item.value.home is not defined) and (item.key != 'root')
 
+- name: create custom homes
+  file:
+    state: directory
+    path:  "{{ item.value.home }}"
+    owner: "{{ item.key }}"
+  with_dict: "{{ common_users__list }}"
+  when: (item.value.home is defined) and (item.key != 'root')
+
 - name: converge user {{ item.key }} with a defined home
   user:
     name:     "{{ item.key }}"
