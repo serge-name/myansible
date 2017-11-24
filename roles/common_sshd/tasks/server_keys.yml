@@ -10,7 +10,7 @@
 
 - name: regenerate RSA host key
   script: regenerate_host_keys.sh rsa {{ common_sshd__rsa_key }}
-  when: common_sshd__v_rsa_key_matches_hostname.rc == 1
+  when: common_sshd__v_rsa_key_matches_hostname.rc is defined and common_sshd__v_rsa_key_matches_hostname.rc == 1
   notify:
     - restart sshd
 
@@ -24,7 +24,7 @@
 
     - name: regenerate ED25519 host key
       script: regenerate_host_keys.sh ed25519 {{ common_sshd__ed25519_key }}
-      when: common_sshd__v_ed25519_key_matches_hostname.rc == 1
+      when: common_sshd__v_ed25519_key_matches_hostname.rc is defined and common_sshd__v_ed25519_key_matches_hostname.rc == 1
       notify:
         - restart sshd
   when: sshd_facts.ed25519_supported

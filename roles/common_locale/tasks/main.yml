@@ -8,6 +8,7 @@
     name: "{{ item }}"
     state: present
   with_items: "{{ common_locale__required_locales }}"
+  when: not ansible_check_mode
 
 - name: get current locale
   shell: . /etc/default/locale; echo $LANG
@@ -16,4 +17,4 @@
 
 - name: converge default locale
   command: update-locale LANG={{ common_locale__default }}
-  when: common_locale__v_current_locale.stdout != common_locale__default
+  when: common_locale__v_current_locale.stdout is defined and (common_locale__v_current_locale.stdout != common_locale__default)

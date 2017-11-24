@@ -2,6 +2,7 @@
 - include: try_fstrim.yml
   vars:
     common_fstrim__mount_to_try: "{{ item.mount }}"
+  when: not ansible_check_mode
   with_items: "{{ ansible_mounts }}"
 
 - include: task_systemd.yml

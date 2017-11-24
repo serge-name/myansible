@@ -51,7 +51,7 @@
 - name: update cache
   apt:
     update_cache: yes
-  when: not (common_apt__v_changed_repos.stdout |is_empty)
+  when: common_apt__v_changed_repos.stdout is defined and not (common_apt__v_changed_repos.stdout |is_empty)
 
 - name: converge preferences
   template:

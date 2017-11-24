@@ -11,7 +11,7 @@
 
 - name: copy timezone DB
   shell: "rm -f /etc/localtime && cp --preserve=mode,timestamps --force /usr/share/zoneinfo/{{ common_timezone__string }} /etc/localtime"
-  when: common_timezone__v_zoneinfo_cmp.rc == 1
+  when: common_timezone__v_zoneinfo_cmp.rc is defined and common_timezone__v_zoneinfo_cmp.rc == 1
 
 - name: converge timezone config
   copy:
