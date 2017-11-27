@@ -24,6 +24,7 @@ common_packages__wanted:
       iotop:                true
       htop:                 true
       psmisc:               true
+      lsscsi:               true
 
       # development
       git:                  true
