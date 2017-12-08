@@ -10,7 +10,7 @@
     path:  "{{ common_users__v_pw.pw.dir }}/.ssh"
     state: directory
     mode:  0700
-  when: common_users__v_pw.pw.dir is defined
+  when: common_users__v_pw.pw is defined and common_users__v_pw.pw.dir is defined
   become_user: "{{ common_users__v_user }}"
 
 - block:
@@ -34,5 +34,5 @@
     dest:   "{{ common_users__v_pw.pw.dir }}/.ssh/authorized_keys"
     backup: yes
     mode:   0600
-  when: common_users__v_pw.pw.dir is defined
+  when: common_users__v_pw.pw is defined and common_users__v_pw.pw.dir is defined
   become_user: "{{ common_users__v_user }}"
