@@ -1,6 +1,5 @@
 ---
-- include: update_var.yml
-  static: no
+- include_tasks: update_var.yml
   vars:
     zfs_tune__v_var_name: "{{ item.key }}"
     zfs_tune__v_var_value: "{{ item.value }}"

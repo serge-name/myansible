@@ -45,7 +45,7 @@
   with_dict: "{{ common_users__list }}"
   when: (item.value.home is defined) and (item.key != 'root')
 
-- include: user_ssh_keys.yml
+- include_tasks: user_ssh_keys.yml
   vars:
     common_users__v_user: "{{ item.key }}"
     common_users__v_ssh_keys: "{{ item.value.authorized_keys }}"

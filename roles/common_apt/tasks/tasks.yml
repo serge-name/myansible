@@ -33,7 +33,7 @@
   with_dict: "{{ common_apt__extra_repos }}"
 
 - name: add extra repos
-  include: add_repo.yml
+  include_tasks: add_repo.yml
   vars:
     common_apt_v__repo_lines: "{{ common_apt__v_extra_repos_loop.value.lines }}"
   when: common_apt__v_extra_repos_loop.value.install == true

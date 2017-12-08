@@ -57,8 +57,7 @@
     - "{{ certbot__etc_dir }}"
     - "{{ certbot__work_dir }}"
 
-- include: internal_web_server.yml
-  static: no
+- include_tasks: internal_web_server.yml
   when: certbot__internal_web_server
 
 - set_fact:
@@ -115,6 +114,5 @@
     enabled: true
     state:   started
 
-- include: nginx.yml
-  static: no
+- include_tasks: nginx.yml
   when: not certbot__internal_web_server

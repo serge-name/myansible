@@ -19,5 +19,5 @@
   with_dict: "{{ common_packages__unwanted }}"
 
 - name: do something only on very first run
-  include: on_very_first_run.yml
+  include_tasks: on_very_first_run.yml
   when: (ansible_local |attr_or_default('ansible_first_run', false))

@@ -1,4 +1,3 @@
 ---
-- include: ferm.yml
-  static: no
+- include_tasks: ferm.yml
   when: not (ferm__rules |is_empty)

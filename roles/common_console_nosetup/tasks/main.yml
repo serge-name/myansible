@@ -1,4 +1,3 @@
 ---
-- include: tasks.yml
-  static: no
+- include_tasks: tasks.yml
   when: common_console_nosetup__play == true

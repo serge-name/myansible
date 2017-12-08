@@ -1,12 +1,12 @@
 ---
-- include: try_fstrim.yml
+- include_tasks: try_fstrim.yml
   vars:
     common_fstrim__mount_to_try: "{{ item.mount }}"
   when: not ansible_check_mode
   with_items: "{{ ansible_mounts }}"
 
-- include: task_systemd.yml
+- include_tasks: task_systemd.yml
   when: (ansible_service_mgr == 'systemd') and (common_fstrim__supported != {})
 
-- include: task_cron.yml
+- include_tasks: task_cron.yml
   when: (ansible_service_mgr != 'systemd') and (common_fstrim__supported != {})

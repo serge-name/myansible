@@ -1,6 +1,5 @@
 ---
-- include: tune_hostname.yml
-  static: no
+- include_tasks: tune_hostname.yml
   when: force_hostname is defined
 
 - name: define hostname_fqdn

@@ -20,6 +20,5 @@
     - "{{ common_sshd__ecdsa_key }}"
     - "{{ common_sshd__ecdsa_key }}.pub"
 
-- include: server_keys.yml
-  static: no
+- include_tasks: server_keys.yml
   when: force_hostname is defined and (ansible_virtualization_role != 'guest' or ansible_virtualization_type != 'lxc')
