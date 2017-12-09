@@ -1,0 +1,5 @@
+---
+- name: install packages
+  apt:
+    name: "{{ nsd__required_packages |to_package_list }}"
+    state: present

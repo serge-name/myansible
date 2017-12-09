@@ -1,0 +1,13 @@
+---
+nsd__required_packages:
+  nsd: true
+
+nsd__user: 'nsd'
+nsd__group: 'nsd'
+
+nsd__conf_dir: '/etc/nsd'
+nsd__conf_path: "{{ nsd__conf_dir }}/nsd.conf"
+nsd__lib_dir: '/var/lib/nsd'
+nsd__binary: '/usr/sbin/nsd'
+
+nsd__identity: ''

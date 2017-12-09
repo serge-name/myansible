@@ -1,0 +1,26 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=Name Server Daemon
+After=network.target
+ConditionFileIsExecutable={{ nsd__binary }}
+
+[Service]
+Type=simple
+Restart=always
+User={{ nsd__user }}
+PrivateTmp=yes
+ProtectSystem=strict
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+NoNewPrivileges=yes
+ReadWritePaths={{ nsd__lib_dir }}
+RuntimeDirectory=nsd
+ExecStart={{ nsd__binary }} -d -c {{ nsd__conf_path }}
+ExecReload=/usr/sbin/nsd-control reload
+
+[Install]
+WantedBy=multi-user.target

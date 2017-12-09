@@ -1,0 +1,9 @@
+---
+- include_tasks: "steps/{{ nsd__v_install_loop.step }}.yml"
+  when: nsd__v_install_loop.condition == true
+  with_items:
+    - { step: '0_systemd',  condition: true }
+    - { step: '1_packages', condition: true }
+    - { step: '2_conf',     condition: true }
+  loop_control:
+    loop_var: nsd__v_install_loop

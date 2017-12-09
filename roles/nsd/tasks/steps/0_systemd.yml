@@ -1,0 +1,15 @@
+---
+- name: create systemd unit
+  template:
+    src:    nsd.service.j2
+    dest:   /etc/systemd/system/nsd.service
+    backup: yes
+    owner:  root
+    group:  root
+    mode:   0644
+  notify: restart nsd.service
+
+- systemd:
+    unit: nsd.service
+    daemon_reload: yes
+    enabled: yes
