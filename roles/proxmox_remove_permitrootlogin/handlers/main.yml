@@ -1,0 +1,5 @@
+---
+- name: reload ssh.service
+  systemd:
+    unit: ssh.service
+    state: reloaded
