@@ -4,3 +4,5 @@ common_users__list: {}
 
 # list of all known SSH keys
 common_users__key_list: {}
+
+common_users__shell: '/bin/bash'
