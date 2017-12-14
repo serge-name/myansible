@@ -16,5 +16,5 @@
     regexp: '^(\s*)GRUB_CMDLINE_LINUX_DEFAULT="([^"]*)"(.*)$'
     replace: '\1GRUB_CMDLINE_LINUX_DEFAULT="\2 net.ifnames=0"\3'
     backup: yes
-  when: common_interfaces_nosystemd__v_grub_defaults.rc != 0
+  when: not ansible_check_mode and common_interfaces_nosystemd__v_grub_defaults.rc != 0
   notify: update-grub

@@ -24,5 +24,5 @@
     regexp: '^(\s*)GRUB_CMDLINE_LINUX_DEFAULT="([^"]*)"(.*)$'
     replace: '\1GRUB_CMDLINE_LINUX_DEFAULT="\2 nomodeset"\3'
     backup: yes
-  when: common_console_nosetup__v_grub_defaults.rc != 0
+  when: not ansible_check_mode and common_console_nosetup__v_grub_defaults.rc != 0
   notify: update-grub
