@@ -10,6 +10,10 @@ common_apt__extra_repos:
     key: 'debian/debian_multimedia_65558117.key'
     install: false
 
+  debian_experimental:
+    lines: "deb http://{{ common_apt__mirror_debian }}/debian/ experimental main contrib non-free"
+    install: false
+
   pve:
     lines: "deb http://download.proxmox.com/debian {{ ansible_distribution_release }} pve-no-subscription"
     key: "proxmox/proxmox_{{ ansible_distribution_release }}.key"
