@@ -29,7 +29,7 @@
 - name: add keys for extra repos
   apt_key:
     data: "{{ lookup('file', item.value.key) }}"
-  when: item.value.install == true
+  when: item.value.install == true and item.value.key is defined
   with_dict: "{{ common_apt__extra_repos }}"
 
 - name: add extra repos
