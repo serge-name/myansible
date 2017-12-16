@@ -1,0 +1,8 @@
+---
+# use additional include level just to get task name nicely evaluated
+- include_tasks: 4d_config_net_hosts_conf.yml
+  vars:
+    tinc__v_config_path: "{{ tinc__v_config_net_base }}/hosts/{{ hostvars[tinc__v_play_hosts_loop].tinc_facts.nets[tinc__v_config_net_name].host_name }}"
+  with_items: "{{ play_hosts }}"
+  loop_control:
+    loop_var: tinc__v_play_hosts_loop

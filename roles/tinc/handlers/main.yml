@@ -1,0 +1,5 @@
+---
+- name: restart tinc.target
+  systemd:
+    unit: tinc.target
+    state: restarted

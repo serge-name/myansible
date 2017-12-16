@@ -1,0 +1,21 @@
+---
+- include_role:
+    name: common_apt
+  vars:
+    common_apt__extra_repos:
+      debian_experimental:
+        install: true
+
+- name: want experimental stuff
+  template:
+    src:   apt_preferences/tinc_experimental.j2
+    dest:  /etc/apt/preferences.d/tinc_experimental
+    owner: root
+    group: root
+    mode:  0644
+
+- name: install packages
+  apt:
+    name: "{{ tinc__required_packages |to_package_list }}"
+    update_cache: yes
+    state: present

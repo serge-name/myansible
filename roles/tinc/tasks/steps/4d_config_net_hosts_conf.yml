@@ -1,0 +1,10 @@
+---
+- name: "{{ tinc__v_config_net_name }} | update {{ tinc__v_config_path }}"
+  template:
+    src:    host.conf.j2
+    dest:   "{{ tinc__v_config_path }}"
+    owner:  "{{ tinc__user }}"
+    group:  "{{ tinc__group }}"
+    mode:   0600
+    backup: no
+  notify: restart tinc.target

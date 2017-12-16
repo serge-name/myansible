@@ -1,0 +1,10 @@
+---
+- name: "{{ tinc__v_config_net_name }} | create tinc-up script"
+  template:
+    src:    tinc-up.j2
+    dest:   "{{ tinc__v_config_net_base }}/tinc-up"
+    backup: yes
+    owner: "{{ tinc__user }}"
+    group: "{{ tinc__group }}"
+    mode:  0700
+  notify: restart tinc.target

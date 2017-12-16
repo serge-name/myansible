@@ -1,0 +1,33 @@
+---
+- name: "{{ tinc__v_config_net_name }} | create subdir"
+  file:
+    state: directory
+    path:  "{{ tinc__v_config_net_base }}"
+    owner: "{{ tinc__user }}"
+    group: "{{ tinc__group }}"
+    mode:  0750
+
+- name: "{{ tinc__v_config_net_name }} | create hosts dir"
+  file:
+    state: directory
+    path:  "{{ tinc__v_config_net_base }}/hosts"
+    owner: "{{ tinc__user }}"
+    group: "{{ tinc__group }}"
+    mode:  0750
+
+- name: "{{ tinc__v_config_net_name }} | create config"
+  template:
+    src:    tinc.conf.j2
+    dest:   "{{ tinc__v_config_net_base }}/tinc.conf"
+    backup: yes
+    owner: "{{ tinc__user }}"
+    group: "{{ tinc__group }}"
+    mode:  0600
+  notify: restart tinc.target
+
+- name: "{{ tinc__v_config_net_name }} | create crypto keys"
+  command: tinc -n {{ tinc__v_config_net_name }} generate-ed25519-keys
+  become_user: "{{ tinc__user }}"
+  args:
+    creates: "{{ tinc__v_config_net_base }}/ed25519_key.p*"
+  notify: restart tinc.target

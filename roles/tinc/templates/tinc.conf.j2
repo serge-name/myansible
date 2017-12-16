@@ -1,0 +1,11 @@
+# **** {{ ansible_managed }} ****
+
+Name = {{ ansible_hostname }}
+AutoConnect = yes
+Interface = {{ tinc__v_config_net.iface }}
+ListenAddress = * {{ tinc__v_config_net.port }}
+LocalDiscovery = no
+ExperimentalProtocol = yes
+Mode = router
+KeyExpire = 1800
+MaxTimeout = 300

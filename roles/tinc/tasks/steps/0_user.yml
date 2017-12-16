@@ -1,0 +1,14 @@
+---
+- name: create group
+  group:
+    name: "{{ tinc__group }}"
+    system: yes
+
+- name: create user
+  user:
+    name:   "{{ tinc__user }}"
+    group:  "{{ tinc__group }}"
+    system: yes
+    home:   /
+    createhome: no
+    shell: '/bin/false'

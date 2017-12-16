@@ -1,0 +1,20 @@
+---
+tinc__required_packages:
+  tinc: '1.1*'
+
+tinc__user:  'tinc'
+tinc__group: 'tinc'
+
+tinc__conf_base: '/etc/tinc'
+tinc__run_dir:   '/run/tinc'
+tinc__lib_dir:   '/usr/lib/tinc'
+tinc__binary:    '/usr/sbin/tincd'
+
+tinc__nets: {}
+
+tinc__compression: 4
+
+tinc__fast_configure: false
+
+tinc__ip_binary_orig:  '/bin/ip'
+tinc__ip_binary_local: "{{ tinc__lib_dir }}/ip"

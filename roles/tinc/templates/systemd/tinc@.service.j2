@@ -1,0 +1,47 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=Tinc net %i
+Documentation=info:tinc
+Documentation=man:tinc(8) man:tinc.conf(5)
+Documentation=http://tinc-vpn.org/docs/
+PartOf=tinc.target
+After=network.target
+Wants=network.target
+ConditionDirectoryNotEmpty={{ tinc__conf_base }}/%i
+ConditionFileIsExecutable={{ tinc__binary }}
+
+[Service]
+WorkingDirectory={{ tinc__conf_base }}/%i
+RuntimeDirectory={{ tinc__run_dir |basename }}
+ProtectSystem=strict
+PrivateTmp=yes
+{% if ansible_virtualization_type == 'openvz' %}
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_IPC_LOCK CAP_SETUID CAP_SETGID
+{% else %}
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_IPC_LOCK
+AmbientCapabilities=CAP_NET_BIND_SERVICE CAP_NET_ADMIN CAP_IPC_LOCK
+User={{ tinc__user }}
+PrivateDevices=true
+DevicePolicy=strict
+DeviceAllow=/dev/null rw
+DeviceAllow=/dev/zero rw
+DeviceAllow=/dev/full rw
+DeviceAllow=/dev/random r
+DeviceAllow=/dev/urandom r
+DeviceAllow=/dev/net/tun rw
+{% endif %}
+{% if ansible_virtualization_type == 'openvz' %}
+PermissionsStartOnly=true
+ExecStartPre=/bin/chown tinc: {{ tinc__run_dir }}
+ExecStart=/usr/bin/setuidgid {{ tinc__user }} {{ tinc__binary }} -n %i --no-detach --mlock --pidfile={{ tinc__run_dir }}/tinc.%i.pid
+{% else %}
+ExecStart={{ tinc__binary }} -n %i --no-detach --mlock --pidfile={{ tinc__run_dir }}/tinc.%i.pid
+{% endif %}
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=5
+TimeoutStopSec=5
+
+[Install]
+WantedBy=tinc.target

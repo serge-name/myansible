@@ -1,0 +1,27 @@
+---
+- name: "mask maintainer's service"
+  systemd:
+    unit: tinc.service
+    masked: yes
+    enabled: no
+    state: stopped
+  failed_when: false
+
+- name: create custom systemd units
+  template:
+    src:    "systemd/{{ item }}.j2"
+    dest:   "/etc/systemd/system/{{ item }}"
+    backup: yes
+    owner:  root
+    group:  root
+    mode:   0644
+  notify: restart tinc.target
+  with_items:
+    - tinc@.service
+    - tinc.target
+
+- systemd:
+    unit: tinc.target
+    daemon_reload: yes
+    enabled: yes
+    state: started
