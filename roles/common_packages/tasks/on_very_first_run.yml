@@ -12,4 +12,8 @@
       when: item.value.condition == true
       with_dict: "{{ common_packages__latest_kernel }}"
 
-  when: common_packages__want_latest_kernel and (ansible_virtualization_type != 'lxc') and (proxmox_facts |is_empty_or_undefined)
+  when:
+    - common_packages__want_latest_kernel
+    - ansible_virtualization_type != 'lxc'
+    - ansible_virtualization_type != 'openvz'
+    - proxmox_facts |is_empty_or_undefined
