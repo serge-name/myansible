@@ -18,13 +18,11 @@ common_packages__wanted:
       sudo:                 true
 
       # system
-      acpid:                true
       strace:               true
       binutils:             true
       iotop:                true
       htop:                 true
       psmisc:               true
-      lsscsi:               true
 
       # development
       git:                  true
@@ -79,6 +77,12 @@ common_packages__wanted:
     condition: "{{ (ansible_virtualization_type == 'kvm') and (ansible_virtualization_role == 'guest') and (ansible_distribution == 'Debian') }}"
     packages:
       qemu-guest-agent:     true
+
+  not_container:
+    condition: "{{ (ansible_virtualization_type != 'lxc') && (ansible_virtualization_type == 'openvz') }} "
+    packages:
+      acpid:                true
+      lsscsi:               true
 
   nfs_client:
     condition: "{{ (common_packages__want_nfs_client) }}"
