@@ -5,7 +5,7 @@
     state:   stopped
     enabled: no
     masked:  yes
-  ignore_errors: true
+  failed_when: false
 
 - name: install packages
   apt:
