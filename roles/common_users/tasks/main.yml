@@ -16,7 +16,9 @@
     regexp: "^(root:)[^:]*(:.*)$"
     replace: "\\1{{ common_users__list.root.password }}\\2"
     backup: yes
-  when: (common_users__list.root is defined) and (common_users__list.root.password is defined)
+  when:
+    - common_users__list.root is defined
+    - not (common_users__list.root.password |is_empty_or_undefined)
 
 - name: converge user {{ item.key }} with a default home
   user:
