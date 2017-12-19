@@ -79,7 +79,7 @@ common_packages__wanted:
       qemu-guest-agent:     true
 
   not_container:
-    condition: "{{ (ansible_virtualization_type != 'lxc') && (ansible_virtualization_type != 'openvz') }} "
+    condition: "{{ (ansible_virtualization_type != 'lxc') and (ansible_virtualization_type != 'openvz') }} "
     packages:
       acpid:                true
       lsscsi:               true
