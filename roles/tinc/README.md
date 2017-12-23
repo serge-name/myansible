@@ -15,6 +15,7 @@
           iface: vpn0
           port:  2222
           mask:  24
+          mode:  switch   # 'router' by default
 ```
 
 ### in host_vars for each host
