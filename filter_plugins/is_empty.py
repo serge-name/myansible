@@ -14,4 +14,4 @@ class FilterModule(object):
 
     def is_empty_or_undefined(self, input_value):
         return (type(input_value) in (StrictUndefined, Undefined, ) or
-                input_value is None or len(input_value) == 0)
+                self.is_empty(input_value))
