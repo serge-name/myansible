@@ -11,17 +11,23 @@ ip={{ tinc__ip_binary_orig }}
 case $NAME in
 {% for h in play_hosts %}
   {{ hostvars[h].tinc_facts.nets[tinc__v_config_net_name].host_name }})
-    ipaddr='{{ hostvars[h].tinc__nets[tinc__v_config_net_name].address }}'
-    routes='{{ hostvars[h].tinc__nets[tinc__v_config_net_name].routes |default([]) |join(' ') }}'
-    ;;
+    ipaddr='{{ hostvars[h].tinc__nets[tinc__v_config_net_name].address }}' ;;
 {% endfor %}
   *)  exit 1 ;;
 esac
 
 $ip l s ${INTERFACE} up
 $ip a a $ipaddr/$netmask dev ${INTERFACE}
-for r in $routes; do
-  $ip r a $r via $ipaddr dev ${INTERFACE}
-done
+
+{% for h in play_hosts %}
+{%   set routes = hostvars[h].tinc__nets[tinc__v_config_net_name].routes |default([]) %}
+{%     if routes %}
+if [[ "$NAME" != "{{ hostvars[h].tinc_facts.nets[tinc__v_config_net_name].host_name }}" ]]; then
+{%       for r in routes %}
+  $ip r a {{ r }} dev ${INTERFACE}
+{%       endfor %}
+fi
+{%   endif %}
+{% endfor %}
 
 exit 0
