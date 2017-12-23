@@ -8,6 +8,15 @@
     mode:  'g+rX,o-rwx'
     recurse: yes
 
+- name: create slave base
+  file:
+    path:  "{{ nsd__slave_base }}"
+    state: directory
+    owner: "{{ nsd__user }}"
+    group: "{{ nsd__group }}"
+    mode:  'go-rwx'
+  when: nsd__slave_base is defined
+
 - name: install config
   template:
     src:    nsd.conf.j2

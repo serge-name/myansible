@@ -5,3 +5,24 @@ server:
 
   hide-version: yes
   identity: "{{ nsd__identity }}"
+
+{% if nsd__slave_base is defined %}
+  zonefiles-write: {{ nsd__zonefiles_write }}
+{% endif %}
+
+{% for k,v in nsd__keys.iteritems() %}
+key:
+  name:      {{ k }}
+  algorithm: {{ v.algorithm }}
+  secret:    "{{ v.secret }}"
+{% endfor %}
+
+{% for k,v in nsd__zones.iteritems() %}
+zone:
+  name:         "{{ k }}"
+{%   if nsd__slave_base is defined %}
+  zonefile:     "{{ nsd__slave_base }}/{{ k }}"
+{%   endif %}
+  allow-notify: {{ v.master }} {{ v.key }}
+  request-xfr:  AXFR {{ v.master }} {{ v.key }}
+{% endfor %}
