@@ -22,7 +22,11 @@ $ip a a $ipaddr/$netmask dev ${INTERFACE}
 {% for h in play_hosts %}
 {%   set routes = hostvars[h].tinc__nets[tinc__v_config_net_name].routes |default([]) %}
 {%   if routes %}
-if [[ "$NAME" != "{{ hostvars[h].tinc_facts.nets[tinc__v_config_net_name].host_name }}" ]]; then
+if [[ "$NAME" = "{{ hostvars[h].tinc_facts.nets[tinc__v_config_net_name].host_name }}" ]]; then
+{%     for r in routes %}
+  $ip r a unreachable {{ r }}
+{%     endfor %}
+else
 {%     for r in routes %}
 {%       if tinc__v_config_net.mode is not defined or tinc__v_config_net.mode == 'router' %}
   $ip r a {{ r }} dev ${INTERFACE}
