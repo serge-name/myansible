@@ -28,7 +28,7 @@
         dest:   /etc/hosts
         backup: yes
         state:  absent
-        regexp: "^{{ item | re_escape }}[ \t]+[^ \t]+[ \t]+[^ \t]+"
+        regexp: "^{{ item | regex_escape }}[ \t]+[^ \t]+[ \t]+[^ \t]+"
       with_items: "{{ ansible_all_ipv4_addresses }}"
   rescue:
     - debug: msg="it looks like 'chattr +i /etc/hosts' has been made, skipping"
