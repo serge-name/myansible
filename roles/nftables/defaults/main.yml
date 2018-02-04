@@ -1,0 +1,7 @@
+---
+nftables__rules: ''
+
+nftables__required_packages:
+  nftables: true
+
+nftables__conf_path: '/etc/nftables.conf'

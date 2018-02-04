@@ -1,0 +1,32 @@
+---
+- name: install packages
+  apt:
+    name: "{{ nftables__required_packages |to_package_list }}"
+    state: present
+  notify: reload nftables.service
+
+- name: install firewall rules
+  copy:
+    content:  "{{ nftables__rules }}"
+    dest:     "{{ nftables__conf_path }}"
+    backup:   yes
+    mode:     0700
+    owner:    root
+    group:    root
+    validate: /usr/sbin/nft -c -f %s
+  notify: reload nftables.service
+
+- name: blacklist iptable_nat
+  template:
+    src:  iptable_nat_blacklist.conf.j2
+    dest: /etc/modprobe.d/iptable_nat_blacklist.conf
+    backup:  yes
+    mode:    0644
+    owner:   root
+    group:   root
+
+- name: remove iptable_nat
+  command: rmmod iptable_nat
+  register: nftables__v_rmmod_iptable_nat
+  failed_when: not (nftables__v_rmmod_iptable_nat.stderr |regex_search('\s+in use') |is_empty)
+  changed_when: nftables__v_rmmod_iptable_nat.rc == 0
