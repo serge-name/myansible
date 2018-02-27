@@ -26,6 +26,7 @@
     skeleton: "{{ item.value.skeleton |default('no') }}"
     system:   "{{ item.value.system |default('no') }}"
     password: "{{ item.value.password |default('*') }}"
+    shell:    "{{ item.value.shell |default(common_users__shell) }}"
   with_dict: "{{ common_users__list }}"
   when: (item.value.home is not defined) and (item.key != 'root')
 
