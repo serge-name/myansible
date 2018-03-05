@@ -1,0 +1,16 @@
+---
+dehydrated__required_packages:
+  dehydrated:  true
+
+dehydrated__cmd_path: '/usr/bin/dehydrated'
+
+dehydrated__etc_dir: '/etc/dehydrated'
+dehydrated__var_dir: '/var/lib/dehydrated'
+
+dehydrated__user: 'dehydrated'
+dehydrated__group: 'dehydrated'
+
+dehydrated__key_algo: 'secp384r1'
+
+dehydrated__reload_services:
+  - nginx

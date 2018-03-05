@@ -1,0 +1,6 @@
+---
+- name: restart dehydrated.timer
+  systemd:
+    unit:    dehydrated.timer
+    daemon_reload: true
+    state:   restarted

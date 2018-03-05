@@ -1,0 +1,20 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=Renew certificates
+Requires=dehydrated-post.service
+ConditionFileIsExecutable={{ dehydrated__cmd_path }}
+
+[Service]
+Type=oneshot
+
+ProtectSystem=strict
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+CapabilityBoundingSet=
+PrivateTmp=true
+ReadWritePaths={{ dehydrated__var_dir }}
+
+ExecStart={{ dehydrated__cmd_path }} -c --accept-terms
+User={{ dehydrated__user }}

@@ -1,0 +1,12 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=Reload services
+After=dehydrated.service
+
+[Service]
+Type=oneshot
+ExecStart=-/bin/bash -c "\
+  find {{ dehydrated__var_dir }}/certs/ -mmin -3 |grep -q . && \
+  systemctl reload {{ dehydrated__reload_services |join(' ') }} "
+User=root

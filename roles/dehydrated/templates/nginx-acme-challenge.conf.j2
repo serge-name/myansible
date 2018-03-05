@@ -1,0 +1,5 @@
+# **** {{ ansible_managed }} ****
+
+location ^~ /.well-known/acme-challenge/ {
+  alias {{ dehydrated__var_dir }}/acme-challenges/;
+}

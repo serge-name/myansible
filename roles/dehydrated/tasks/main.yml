@@ -1,0 +1,72 @@
+---
+- assert: { that: "ansible_service_mgr == 'systemd'" }
+
+- name: install packages
+  apt:
+    name:  "{{ dehydrated__required_packages |to_package_list }}"
+    state: latest
+  tags:
+    - package:install
+    - package
+
+- name: converge group
+  group:
+    name: "{{ dehydrated__group }}"
+    system: yes
+
+- name: converge user
+  user:
+    name: "{{ dehydrated__user }}"
+    group: "{{ dehydrated__group }}"
+    system: yes
+    home: /
+    createhome: no
+    shell: '/bin/false'
+
+- name: fix permissions
+  file:
+    state: directory
+    path:  "{{ dehydrated__var_dir }}"
+    owner: "{{ dehydrated__user }}"
+    group: "{{ dehydrated__group }}"
+    mode:  'go+rX'
+    recurse: true
+
+- name: converge config
+  template:
+    src:  local.sh.j2
+    dest: "{{ dehydrated__etc_dir }}/conf.d/local.sh"
+    owner: root
+    group: root
+    mode:  0644
+    backup: yes
+
+- name: converge timer
+  template:
+    src:  "systemd/{{ item }}.j2"
+    dest: "/etc/systemd/system/{{ item }}"
+    owner: root
+    group: root
+    mode:  0644
+    backup: yes
+  with_items:
+    - dehydrated-post.service
+    - dehydrated.service
+    - dehydrated.timer
+  notify: restart dehydrated.timer
+
+- name: ensure our timer is started
+  systemd:
+    unit:    dehydrated.timer
+    daemon_reload: true
+    enabled: true
+    state:   started
+
+- name: converge nginx location
+  template:
+    src:  nginx-acme-challenge.conf.j2
+    dest: "{{ dehydrated__etc_dir }}/nginx-acme-challenge.conf"
+    owner: root
+    group: root
+    mode:  0644
+    backup: yes
