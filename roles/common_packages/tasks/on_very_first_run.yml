@@ -17,3 +17,4 @@
     - ansible_virtualization_type != 'lxc'
     - ansible_virtualization_type != 'openvz'
     - proxmox_facts |is_empty_or_undefined
+    - not (ansible_cmdline.scaleway |default(false))
