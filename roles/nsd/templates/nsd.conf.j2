@@ -2,9 +2,12 @@
 
 server:
   reuseport: yes
+  verbosity: 1
 
   hide-version: yes
   identity: "{{ nsd__identity }}"
+  minimal-responses: yes
+  round-robin: yes
 
 {% if nsd__slave_base is defined %}
   zonefiles-write: {{ nsd__zonefiles_write }}
