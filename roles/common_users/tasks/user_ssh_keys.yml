@@ -36,3 +36,14 @@
     mode:   0600
   when: common_users__v_pw.pw is defined and common_users__v_pw.pw.dir is defined
   become_user: "{{ common_users__v_user }}"
+
+- name: converge instance_keys for root
+  template:
+    src:    authorized_keys.j2
+    dest:   "{{ common_users__v_pw.pw.dir }}/.ssh/instance_keys"
+    backup: yes
+    mode:   0600
+  when:
+    - common_users__v_user == 'root'
+    - ansible_cmdline.scaleway |default(false)
+  become_user: "{{ common_users__v_user }}"
