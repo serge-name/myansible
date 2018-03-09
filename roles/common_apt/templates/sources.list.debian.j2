@@ -3,5 +3,5 @@
 deb http://{{ common_apt__mirror_debian }}/debian/ {{ ansible_lsb.codename }}                  main contrib non-free
 deb http://{{ common_apt__mirror_debian }}/debian/ {{ ansible_lsb.codename }}-updates          main contrib non-free
 deb http://{{ common_apt__mirror_debian }}/debian/ {{ ansible_lsb.codename }}-proposed-updates main contrib non-free
-deb http://{{ common_apt__mirror_debian }}/debian/ {{ ansible_lsb.codename }}-backports        main contrib non-free
+{{ (ansible_lsb.major_release == 'testing') |ternary('#', '') }}deb http://{{ common_apt__mirror_debian }}/debian/ {{ ansible_lsb.codename }}-backports        main contrib non-free
 deb http://security.debian.org/ {{ ansible_lsb.codename }}/updates main contrib non-free
