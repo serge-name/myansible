@@ -7,7 +7,7 @@ common_sshd__ed25519_key: "{{ common_sshd__conf_dir }}/ssh_host_ed25519_key"
 common_sshd__dsa_key: "{{ common_sshd__conf_dir }}/ssh_host_dsa_key"
 common_sshd__ecdsa_key: "{{ common_sshd__conf_dir }}/ssh_host_ecdsa_key"
 
-common_sshd__distro_string: "{{ ansible_distribution |lower }}_{{ ansible_distribution_release }}"
+common_sshd__distro_string: "{{ ansible_distribution |lower }}_{{ ansible_lsb.codename }}"
 
 
 common_sshd__password_authentication: 'no'

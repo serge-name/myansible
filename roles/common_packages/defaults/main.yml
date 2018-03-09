@@ -57,7 +57,7 @@ common_packages__wanted:
       netcat-openbsd:       true
 
   debian8:
-    condition: "{{ ansible_distribution_release == 'jessie' }}"
+    condition: "{{ ansible_lsb.codename == 'jessie' }}"
     packages:
       pinentry-curses:      true
 
@@ -120,7 +120,7 @@ common_packages__unwanted:
       vim-tiny:             true
 
   ubuntu1604:
-    condition: "{{ ansible_distribution_release == 'xenial' }}"
+    condition: "{{ ansible_lsb.codename == 'xenial' }}"
     packages:
       lxd:                  true
       lxd-client:           true
@@ -141,7 +141,7 @@ common_packages__unwanted:
 common_packages__want_latest_kernel: true
 common_packages__latest_kernel:
   ubuntu1204:
-    condition: "{{ ansible_distribution_release == 'precise' }}"
+    condition: "{{ ansible_lsb.codename == 'precise' }}"
     packages:
       linux-image-generic-lts-trusty:   true
       linux-headers-generic-lts-trusty: true

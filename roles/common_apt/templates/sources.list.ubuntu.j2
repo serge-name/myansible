@@ -1,8 +1,8 @@
 # **** {{ ansible_managed }} ****
 
-deb http://{{ common_apt__mirror_ubuntu }}/ubuntu/ {{ ansible_distribution_release }} main restricted universe multiverse
-deb http://{{ common_apt__mirror_ubuntu }}/ubuntu/ {{ ansible_distribution_release }}-updates main restricted universe multiverse
-deb http://{{ common_apt__mirror_ubuntu }}/ubuntu/ {{ ansible_distribution_release }}-proposed main restricted universe multiverse
-deb http://{{ common_apt__mirror_ubuntu }}/ubuntu/ {{ ansible_distribution_release }}-backports main restricted universe multiverse
-deb http://security.ubuntu.com/ubuntu/ {{ ansible_distribution_release }}-security main restricted universe multiverse
-deb http://archive.canonical.com/ubuntu/ {{ ansible_distribution_release }} partner
+deb http://{{ common_apt__mirror_ubuntu }}/ubuntu/ {{ ansible_lsb.codename }} main restricted universe multiverse
+deb http://{{ common_apt__mirror_ubuntu }}/ubuntu/ {{ ansible_lsb.codename }}-updates main restricted universe multiverse
+deb http://{{ common_apt__mirror_ubuntu }}/ubuntu/ {{ ansible_lsb.codename }}-proposed main restricted universe multiverse
+deb http://{{ common_apt__mirror_ubuntu }}/ubuntu/ {{ ansible_lsb.codename }}-backports main restricted universe multiverse
+deb http://security.ubuntu.com/ubuntu/ {{ ansible_lsb.codename }}-security main restricted universe multiverse
+deb http://archive.canonical.com/ubuntu/ {{ ansible_lsb.codename }} partner

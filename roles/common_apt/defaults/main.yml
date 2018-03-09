@@ -5,8 +5,8 @@ common_apt__mirror_debian: ftp.ru.debian.org
 common_apt__extra_repos:
   debian_multimedia:
     lines:
-      - "deb http://{{ common_apt__mirror_debian }}/debian-multimedia/ {{ ansible_distribution_release }} main non-free"
-      - "deb http://{{ common_apt__mirror_debian }}/debian-multimedia/ {{ ansible_distribution_release }}-backports main"
+      - "deb http://{{ common_apt__mirror_debian }}/debian-multimedia/ {{ ansible_lsb.codename }} main non-free"
+      - "deb http://{{ common_apt__mirror_debian }}/debian-multimedia/ {{ ansible_lsb.codename }}-backports main"
     key: 'debian/debian_multimedia_65558117.key'
     install: false
 
@@ -15,8 +15,8 @@ common_apt__extra_repos:
     install: false
 
   pve:
-    lines: "deb http://download.proxmox.com/debian {{ ansible_distribution_release }} pve-no-subscription"
-    key: "proxmox/proxmox_{{ ansible_distribution_release }}.key"
+    lines: "deb http://download.proxmox.com/debian {{ ansible_lsb.codename }} pve-no-subscription"
+    key: "proxmox/proxmox_{{ ansible_lsb.codename }}.key"
     install: false
 
 common_apt__base_dir: /etc/apt
