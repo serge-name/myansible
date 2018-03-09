@@ -26,3 +26,13 @@ zone:
   allow-notify: {{ v.master }} {{ v.key }}
   request-xfr:  AXFR {{ v.master }} {{ v.key }}
 {% endfor %}
+
+{% for k,v in nsd__master_zones.iteritems() %}
+zone:
+  name:         "{{ k }}"
+  zonefile:     "{{ nsd__master_base }}/{{ k }}"
+  {% for ip in v.slaves|default([]) %}
+  provide-xfr:  {{ ip }} NOKEY
+  notify:       {{ ip }} NOKEY
+  {% endfor %}
+{% endfor %}

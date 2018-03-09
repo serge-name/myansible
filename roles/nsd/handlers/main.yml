@@ -3,3 +3,7 @@
   systemd:
     unit: nsd.service
     state: restarted
+
+- name: reload nsd zones
+  command: nsd-control reload
+  become_user: "{{ nsd__user }}"

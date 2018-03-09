@@ -1,0 +1,10 @@
+---
+- name: install {{ item }} master zone
+  template:
+    src:   "{{ item.value.template }}"
+    dest:  "{{ nsd__master_base }}/{{ item.key }}"
+    owner: root
+    group: "{{ nsd__group }}"
+    mode:  '0640'
+  with_dict: "{{ nsd__master_zones }}"
+  notify: reload nsd zones

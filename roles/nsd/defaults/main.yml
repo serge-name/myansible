@@ -9,6 +9,7 @@ nsd__conf_dir: '/etc/nsd'
 nsd__conf_path: "{{ nsd__conf_dir }}/nsd.conf"
 nsd__lib_dir: '/var/lib/nsd'
 #nsd__slave_base: "{{ nsd__lib_dir }}/slave"
+nsd__master_base: "{{ nsd__conf_dir }}/master"
 nsd__binary: '/usr/sbin/nsd'
 
 nsd__identity: ''
@@ -16,3 +17,4 @@ nsd__zonefiles_write: 60
 
 nsd__keys: {}
 nsd__zones: {}
+nsd__master_zones: {}

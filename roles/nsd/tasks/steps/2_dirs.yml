@@ -1,0 +1,27 @@
+---
+- name: create slave base
+  file:
+    path:  "{{ nsd__slave_base }}"
+    state: directory
+    owner: "{{ nsd__user }}"
+    group: "{{ nsd__group }}"
+    mode:  'go-rwx'
+  when: nsd__slave_base is defined
+
+- name: create master base
+  file:
+    path:  "{{ nsd__master_base }}"
+    state: directory
+    owner: root
+    group: "{{ nsd__group }}"
+    mode:  '0750'
+  when: (nsd__master_zones|length) > 0
+
+- name: fix permissions
+  file:
+    path:  "{{ nsd__conf_dir }}"
+    state: directory
+    owner: root
+    group: "{{ nsd__group }}"
+    mode:  'g+rX,o-rwx'
+    recurse: yes
