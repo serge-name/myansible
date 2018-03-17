@@ -6,7 +6,9 @@ server:
 
   hide-version: yes
   identity: "{{ nsd__identity }}"
+{% if nsd__minimal_responses %}
   minimal-responses: yes
+{% endif %}
   round-robin: yes
 
 {% if nsd__slave_base is defined %}

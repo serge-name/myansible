@@ -18,3 +18,5 @@ nsd__zonefiles_write: 60
 nsd__keys: {}
 nsd__zones: {}
 nsd__master_zones: {}
+
+nsd__minimal_responses: false
