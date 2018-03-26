@@ -4,3 +4,6 @@
     unit:    dehydrated.timer
     daemon_reload: true
     state:   restarted
+
+- name: update ca certificates
+  command: update-ca-certificates

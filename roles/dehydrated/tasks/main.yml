@@ -71,3 +71,15 @@
     group: root
     mode:  0644
     backup: yes
+
+- name: "install Let's Encrypt CA"
+  copy:
+    src:  "{{ item }}"
+    dest: "/usr/local/share/ca-certificates/{{ item |basename }}"
+    owner: root
+    group: root
+    mode:  0644
+    backup: yes
+  with_fileglob:
+    - "files/*.crt"
+  notify: update ca certificates
