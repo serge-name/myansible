@@ -6,7 +6,7 @@
 - name: check whether we need to update timezone info file
   command: "cmp /usr/share/zoneinfo/{{ common_timezone__string }} /etc/localtime"
   register: common_timezone__v_zoneinfo_cmp
-  failed_when: (common_timezone__v_zoneinfo_cmp.msg is defined) or (common_timezone__v_zoneinfo_cmp.rc >= 2)
+  failed_when: common_timezone__v_zoneinfo_cmp.rc >= 2
   changed_when: false
 
 - name: copy timezone DB
