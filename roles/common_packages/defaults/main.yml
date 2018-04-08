@@ -146,7 +146,7 @@ common_packages__latest_kernel:
       linux-image-generic-lts-trusty:   true
       linux-headers-generic-lts-trusty: true
 
-  debian8:
+  debian:
     condition: "{{ ansible_distribution == 'Debian' }}"
     packages:
       linux-image-amd64: true
