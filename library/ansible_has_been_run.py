@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 ASNIBLE_FACTS_PATH = '/etc/ansible/facts.d'
-FACT_NAME = 'ansible_first_run'
+FACT_NAME = 'ansible_has_been_run'
 
 import errno
 import os
@@ -26,7 +26,6 @@ def main():
 
     module = AnsibleModule(
         argument_spec = dict(
-            phase = dict(default='single', choices=['single','pre','post']),
         ),
         supports_check_mode = True
     )
@@ -37,10 +36,9 @@ def main():
     changed = False if module.check_mode else mkdir_p(ASNIBLE_FACTS_PATH)
 
     if not os.path.isfile(fact_path):
-        if module.params['phase'] != 'pre':
-            if not module.check_mode:
-                write_to_file(fact_path, "false\n")
-            changed = True
+        if not module.check_mode:
+            write_to_file(fact_path, "true\n")
+        changed = True
         args['ansible_facts'] = { 'ansible_local': { FACT_NAME: True } }
 
     args['changed'] = changed
