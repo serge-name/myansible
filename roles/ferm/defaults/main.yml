@@ -5,3 +5,4 @@ ferm__required_packages:
   ferm: true
 
 ferm__conf_path: '/etc/ferm/ferm.conf'
+ferm__exec_path: '/usr/sbin/ferm'
