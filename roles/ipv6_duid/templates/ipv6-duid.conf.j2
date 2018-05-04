@@ -1,0 +1,5 @@
+# **** {{ ansible_managed }} ****
+
+interface "{{ ipv6_duid__interface }}" {
+   send dhcp6.client-id {{ ipv6_duid__duid }};
+}

@@ -1,0 +1,22 @@
+---
+- name: create group
+  group:
+    name: "{{ ipv6_duid__dhclient_group }}"
+    system: yes
+
+- name: create user
+  user:
+    name:   "{{ ipv6_duid__dhclient_user }}"
+    group:  "{{ ipv6_duid__dhclient_group }}"
+    system: yes
+    home:   "{{ ipv6_duid__dhclient_lib_dir }}"
+    createhome: no
+    shell: '/bin/false'
+
+- name: create lib dir and fix permissions
+  file:
+    state: directory
+    path:  "{{ ipv6_duid__dhclient_lib_dir }}"
+    owner: "{{ ipv6_duid__dhclient_user }}"
+    group: "{{ ipv6_duid__dhclient_group }}"
+    recurse: yes

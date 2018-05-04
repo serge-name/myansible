@@ -1,0 +1,13 @@
+# **** {{ ansible_managed }} ****
+
+if [ $reason = RELEASE6 ] && [ -n "${old_ip6_prefix}" ]; then
+  for a in `ip -6 a sh dev $interface scope global |awk '/inet6 / {print $2}'`; do
+    cmd="ip -6 a d $a dev $interface"
+    echo $cmd
+    $cmd
+  done
+
+  cmd="ip -6 r d default dev $interface"
+  echo $cmd
+  $cmd
+fi

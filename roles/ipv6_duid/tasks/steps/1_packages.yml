@@ -1,0 +1,5 @@
+---
+- name: install packages
+  apt:
+    name: "{{ ipv6_duid__required_packages |to_package_list }}"
+    state: present

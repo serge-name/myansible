@@ -1,0 +1,3 @@
+---
+- name: restart ipv6-duid.service
+  command: '/bin/true'

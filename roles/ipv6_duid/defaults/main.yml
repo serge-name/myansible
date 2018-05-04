@@ -1,0 +1,14 @@
+---
+ipv6_duid__required_packages:
+  isc-dhcp-client: true
+  ndisc6:          true
+
+ipv6_duid__dhclient_user:  'dhcp'
+ipv6_duid__dhclient_group: 'dhcp'
+
+ipv6_duid__dhclient_lib_dir:    '/var/lib/dhcp'
+ipv6_duid__dhclient_conf_dir:   '/etc/dhcp'
+ipv6_duid__dhclient_conf_file:  "{{ ipv6_duid__dhclient_conf_dir }}/ipv6-duid.conf"
+ipv6_duid__dhclient_enter_hook: "{{ ipv6_duid__dhclient_conf_dir }}/dhclient-enter-hooks.d/ipv6-duid-enter-hook"
+ipv6_duid__dhclient_exit_hook:  "{{ ipv6_duid__dhclient_conf_dir }}/dhclient-exit-hooks.d/ipv6-duid-exit-hook"
+ipv6_duid__dhclient_pid_file:   "/run/dhclient/dhclient6.{{ ipv6_duid__interface }}.pid"
