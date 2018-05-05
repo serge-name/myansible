@@ -4,15 +4,16 @@ if [ $reason = REBIND6 ] || [ $reason = BOUND6 ]; then
   if [ -n "${new_ip6_prefix}" ]; then
     ip6_addr='{{ ipv6_duid__addr }}'
 
-    cmd="ip -6 a a ${ip6_addr} dev ${interface}"
-    echo $cmd
-    $cmd
+    run_cmd() {
+      echo $*
+      $*
+    }
+
+    run_cmd "ip -6 a a ${ip6_addr} dev ${interface}"
 
     ip6_gw=`rdisc6 -v -w 500 ${interface} |awk '/from / {print $2}'`
     if [ -n "${ip6_gw}" ]; then
-      cmd="ip -6 r c default dev ${interface} via ${ip6_gw}"
-      echo $cmd
-      $cmd
+      run_cmd "ip -6 r c default dev ${interface} via ${ip6_gw}"
     else
       echo "ERROR: unable to autodiscover a default gw"
     fi
