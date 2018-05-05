@@ -2,9 +2,8 @@
 - include_tasks: "steps/{{ ipv6_duid__v_install_loop.step }}.yml"
   when: ipv6_duid__v_install_loop.condition == true
   with_items:
-    - { step: '0_user_dirs', condition: true }
-    - { step: '1_packages',  condition: true }
-    - { step: '2_conf',      condition: true }
-    - { step: '3_systemd',   condition: true }
+    - { step: '0_packages',  condition: true }
+    - { step: '1_conf',      condition: true }
+    - { step: '2_systemd',   condition: true }
   loop_control:
     loop_var: ipv6_duid__v_install_loop
