@@ -41,6 +41,17 @@
   loop_control:
     loop_var: common_apt__v_extra_repos_loop
 
+- name: add preferences for extra repos
+  include_tasks: add_repo_preferences.yml
+  vars:
+    common_apt_v__repo_key: "{{ common_apt__v_extra_repos_loop.key }}"
+    common_apt_v__repo_preferences: "{{ common_apt__v_extra_repos_loop.value.preferences }}"
+    common_apt_v__repo_preferences_pin: "{{ common_apt__v_extra_repos_loop.value.preferences_pin }}"
+  when: common_apt__v_extra_repos_loop.value.preferences is defined
+  with_dict: "{{ common_apt__extra_repos }}"
+  loop_control:
+    loop_var: common_apt__v_extra_repos_loop
+
 - name: check whether anything has been changed
   shell: find sources.list* -type f -mmin -1
   args:

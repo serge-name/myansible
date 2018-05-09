@@ -7,19 +7,23 @@ common_apt__extra_repos:
     lines:
       - "deb http://{{ common_apt__mirror_debian }}/debian-multimedia/ {{ ansible_lsb.codename }} main non-free"
       - "deb http://{{ common_apt__mirror_debian }}/debian-multimedia/ {{ ansible_lsb.codename }}-backports main"
+    preferences_pin: 'release o=Unofficial Multimedia Packages'
     key: 'debian/debian_multimedia_65558117.key'
     install: false
 
   debian_unstable:
     lines: "deb http://{{ common_apt__mirror_debian }}/debian/ unstable main contrib non-free"
+    preferences_pin: 'release o=Debian,a=unstable'
     install: false
 
   debian_experimental:
     lines: "deb http://{{ common_apt__mirror_debian }}/debian/ experimental main contrib non-free"
+    preferences_pin: 'release o=Debian,a=experimental'
     install: false
 
   pve:
     lines: "deb http://download.proxmox.com/debian {{ ansible_lsb.codename }} pve-no-subscription"
+    preferences_pin: 'release o=Proxmox'
     key: "proxmox/proxmox_{{ ansible_lsb.codename }}.key"
     install: false
 

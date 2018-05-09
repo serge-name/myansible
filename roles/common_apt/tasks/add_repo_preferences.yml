@@ -1,0 +1,11 @@
+---
+- name: install repo preferences
+  template:
+    src: repo_preferences.j2
+    dest:   "{{ common_apt__base_dir }}/preferences.d/{{ common_apt_v__repo_key }}_{{ item.key }}"
+    backup: no
+    mode:   0644
+    owner:  root
+    group:  root
+  with_dict:
+    - "{{ common_apt_v__repo_preferences }}"
