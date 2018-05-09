@@ -5,14 +5,10 @@
     common_apt__extra_repos:
       debian_experimental:
         install: true
-
-- name: want experimental stuff
-  template:
-    src:   apt_preferences/tinc_experimental.j2
-    dest:  /etc/apt/preferences.d/tinc_experimental
-    owner: root
-    group: root
-    mode:  0644
+        preferences:
+          tinc:
+            packages: "tinc"
+            priority: 500
 
 - name: install packages
   apt:
