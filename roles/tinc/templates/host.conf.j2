@@ -1,16 +1,16 @@
 # ****  {{ ansible_managed }} ****
 
-Address = {{ hostvars[tinc__v_play_hosts_loop].ansible_default_ipv4.address }}
-{% set ipv6_addr = hostvars[tinc__v_play_hosts_loop].ansible_default_ipv6.address |default('') %}
+Address = {{ tinc__v_net_hosts_loop.value.ansible_default_ipv4_address }}
+{% set ipv6_addr = tinc__v_net_hosts_loop.value.ansible_default_ipv6_address %}
 {% if ipv6_addr %}
 Address = {{ ipv6_addr }}
 {% endif %}
 Port = {{ tinc__v_config_net.port }}
 Compression = {{ tinc__compression }}
 {% if tinc__v_config_net.mode is not defined or tinc__v_config_net.mode == 'router' %}
-Subnet = {{ hostvars[tinc__v_play_hosts_loop].tinc__nets[tinc__v_config_net_name].address }}
-{%   for r in (hostvars[tinc__v_play_hosts_loop].tinc__nets[tinc__v_config_net_name].routes |default([])) %}
+Subnet = {{ tinc__v_net_hosts_loop.value.address }}
+{%   for r in tinc__v_net_hosts_loop.value.routes %}
 Subnet = {{ r }}
 {%   endfor %}
 {% endif %}
-Ed25519PublicKey = {{ hostvars[tinc__v_play_hosts_loop].tinc_facts.nets[tinc__v_config_net_name].pub_key }}
+Ed25519PublicKey = {{ tinc__v_net_hosts_loop.value.pub_key }}

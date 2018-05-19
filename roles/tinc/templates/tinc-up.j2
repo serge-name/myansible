@@ -9,9 +9,9 @@ ip={{ tinc__ip_binary_orig }}
 {% endif %}
 
 case $NAME in
-{% for h in play_hosts %}
-  {{ hostvars[h].tinc_facts.nets[tinc__v_config_net_name].host_name }})
-    ipaddr='{{ hostvars[h].tinc__nets[tinc__v_config_net_name].address }}' ;;
+{% for h,d in tinc__v_peers.data[tinc__v_config_net_name].iteritems() %}
+  {{ d.host_name }})
+    ipaddr='{{ d.address }}' ;;
 {% endfor %}
   *)  exit 1 ;;
 esac
@@ -19,19 +19,18 @@ esac
 $ip l s ${INTERFACE} up
 $ip a a $ipaddr/$netmask dev ${INTERFACE}
 
-{% for h in play_hosts %}
-{%   set routes = hostvars[h].tinc__nets[tinc__v_config_net_name].routes |default([]) %}
-{%   if routes %}
-if [[ "$NAME" = "{{ hostvars[h].tinc_facts.nets[tinc__v_config_net_name].host_name }}" ]]; then
-{%     for r in routes %}
+{% for h,d in tinc__v_peers.data[tinc__v_config_net_name].iteritems() %}
+{%   if d.routes %}
+if [[ "$NAME" = "{{ d.host_name }}" ]]; then
+{%     for r in d.routes %}
   $ip r a unreachable {{ r }}
 {%     endfor %}
 else
-{%     for r in routes %}
+{%     for r in d.routes %}
 {%       if tinc__v_config_net.mode is not defined or tinc__v_config_net.mode == 'router' %}
   $ip r a {{ r }} dev ${INTERFACE}
 {%       else %}
-  $ip r a {{ r }} via {{ hostvars[h].tinc__nets[tinc__v_config_net_name].address }} dev ${INTERFACE}
+  $ip r a {{ r }} via {{ d.address }} dev ${INTERFACE}
 {%       endif %}
 {%     endfor %}
 fi

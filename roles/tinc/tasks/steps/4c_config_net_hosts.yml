@@ -1,8 +1,13 @@
 ---
-# use additional include level just to get task name nicely evaluated
-- include_tasks: 4d_config_net_hosts_conf.yml
-  vars:
-    tinc__v_config_path: "{{ tinc__v_config_net_base }}/hosts/{{ hostvars[tinc__v_play_hosts_loop].tinc_facts.nets[tinc__v_config_net_name].host_name }}"
-  with_items: "{{ play_hosts }}"
+- name: "{{ tinc__v_config_net_name }} | update host config"
+  template:
+    src:    host.conf.j2
+    dest:   "{{ tinc__v_config_net_base }}/hosts/{{ tinc__v_net_hosts_loop.value.host_name }}"
+    owner:  "{{ tinc__user }}"
+    group:  "{{ tinc__group }}"
+    mode:   0600
+    backup: no
+  notify: restart tinc.target
+  with_dict: "{{ tinc__v_peers.data[tinc__v_config_net_name] }}"
   loop_control:
-    loop_var: tinc__v_play_hosts_loop
+    loop_var: tinc__v_net_hosts_loop

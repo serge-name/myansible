@@ -17,24 +17,31 @@
 - name: gather tinc facts
   tinc_facts:
   become_user: "{{ tinc__user }}"
-  register: tinc__v_facts
 
-- include_tasks: 4b_config_net_scripts.yml
-  vars:
-    tinc__v_config_net: "{{ item.value }}"
-    tinc__v_config_net_name: "{{ item.key }}"
-    tinc__v_config_net_base: "{{ tinc__conf_base }}/{{ item.key }}"
-  with_dict: "{{ tinc__nets }}"
+- set_fact:
+    tinc__v_peers: "{{ lookup('tinc_peers') }}"
 
-- include_tasks: 4c_config_net_hosts.yml
-  vars:
-    tinc__v_config_net: "{{ item.value }}"
-    tinc__v_config_net_name: "{{ item.key }}"
-    tinc__v_config_net_base: "{{ tinc__conf_base }}/{{ item.key }}"
-  with_dict: "{{ tinc__nets }}"
+- debug: { msg: "Tinc peer data is incomplete. Skipping rest configuration steps" }
+  when: not tinc__v_peers.complete
 
-- systemd:
-    unit: "tinc@{{ item.key }}.service"
-    daemon_reload: yes
-    enabled: yes
-  with_dict: "{{ tinc__nets }}"
+- block:
+    - include_tasks: 4b_config_net_scripts.yml
+      vars:
+        tinc__v_config_net: "{{ item.value }}"
+        tinc__v_config_net_name: "{{ item.key }}"
+        tinc__v_config_net_base: "{{ tinc__conf_base }}/{{ item.key }}"
+      with_dict: "{{ tinc__nets }}"
+
+    - include_tasks: 4c_config_net_hosts.yml
+      vars:
+        tinc__v_config_net: "{{ item.value }}"
+        tinc__v_config_net_name: "{{ item.key }}"
+        tinc__v_config_net_base: "{{ tinc__conf_base }}/{{ item.key }}"
+      with_dict: "{{ tinc__nets }}"
+
+    - systemd:
+        unit: "tinc@{{ item.key }}.service"
+        daemon_reload: yes
+        enabled: yes
+      with_dict: "{{ tinc__nets }}"
+  when: tinc__v_peers.complete
