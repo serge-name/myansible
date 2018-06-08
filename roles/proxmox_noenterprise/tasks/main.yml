@@ -10,13 +10,27 @@
 - name: check pve-manager version
   pkg_check:
     name: pve-manager
-  register: proxmox_noenterprise__v_package
+  register: proxmox_noenterprise__v_manager_package
 
 # https://www.jamescoyle.net/how-to/614-remove-the-proxmox-no-subscription-message
 - name: patch JS
   replace:
-    path: "{{ proxmox_noenterprise__js_path }}"
+    path: "{{ proxmox_noenterprise__js_manager_path }}"
     regexp: "if \\(data\\.status !== 'Active'\\) \\{"
     replace: "if (false) {"
     backup: yes
-  when: proxmox_noenterprise__v_package.installed
+  when: proxmox_noenterprise__v_manager_package.installed
+
+# For Proxmox 5.x
+- name: check proxmox-widget-toolkit version
+  pkg_check:
+    name: proxmox-widget-toolkit
+  register: proxmox_noenterprise__v_widget_package
+
+- name: patch JS
+  replace:
+    path: "{{ proxmox_noenterprise__js_widget_path }}"
+    regexp: "if \\(data\\.status !== 'Active'\\) \\{"
+    replace: "if (false) {"
+    backup: yes
+  when: proxmox_noenterprise__v_widget_package.installed
