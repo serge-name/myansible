@@ -2,8 +2,6 @@
 memcached__required_packages:
   memcached: true
 
-memcached__user: 'memcache'
-
 memcached__mem_default: 0.10
 memcached__loopback_default: true
 
