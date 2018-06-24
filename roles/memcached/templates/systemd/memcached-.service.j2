@@ -7,6 +7,7 @@ After=network.target
 Conflicts=shutdown.target
 
 [Service]
+Slice=system-memcached.slice
 User={{ memcached__user }}
 WorkingDirectory=/
 PrivateTmp=yes
