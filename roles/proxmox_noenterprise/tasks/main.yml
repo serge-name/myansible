@@ -18,7 +18,7 @@
     path: "{{ proxmox_noenterprise__js_manager_path }}"
     regexp: "if \\(data\\.status !== 'Active'\\) \\{"
     replace: "if (false) {"
-    backup: yes
+    backup: no
   when: proxmox_noenterprise__v_manager_package.installed
 
 # For Proxmox 5.x
@@ -32,5 +32,5 @@
     path: "{{ proxmox_noenterprise__js_widget_path }}"
     regexp: "if \\(data\\.status !== 'Active'\\) \\{"
     replace: "if (false) {"
-    backup: yes
+    backup: no
   when: proxmox_noenterprise__v_widget_package.installed
