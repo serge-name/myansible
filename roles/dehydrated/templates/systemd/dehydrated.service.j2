@@ -7,6 +7,7 @@ ConditionFileIsExecutable={{ dehydrated__cmd_path }}
 
 [Service]
 Type=oneshot
+User={{ dehydrated__user }}
 
 ProtectSystem=strict
 PrivateDevices=true
@@ -16,5 +17,18 @@ CapabilityBoundingSet=
 PrivateTmp=true
 ReadWritePaths={{ dehydrated__var_dir }}
 
+{% if dehydrated__exec_start_pre is defined %}
+ExecStartPre=+/bin/sh -c " \
+{%   for el in dehydrated__exec_start_pre %}
+  {{ el }}; \
+{%   endfor %}
+  "
+{% endif %}
 ExecStart={{ dehydrated__cmd_path }} -c --accept-terms
-User={{ dehydrated__user }}
+{% if dehydrated__exec_start_post is defined %}
+ExecStartPost=+/bin/sh -c " \
+{%   for el in dehydrated__exec_start_post %}
+  {{ el }}; \
+{%   endfor %}
+  "
+{% endif %}
