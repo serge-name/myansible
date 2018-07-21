@@ -1,0 +1,8 @@
+---
+prometheus__required_packages:
+  prometheus: '2.3.*'
+
+prometheus__conf_path: '/etc/prometheus/prometheus.yml'
+
+prometheus__user: 'prometheus'
+prometheus__group: 'prometheus'

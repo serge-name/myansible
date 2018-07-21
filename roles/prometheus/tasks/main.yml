@@ -1,0 +1,7 @@
+---
+- include_tasks: "steps/{{ prometheus__yml_loop }}.yml"
+  with_items:
+    - '0_packages'
+    - '1_configs'
+  loop_control:
+    loop_var: prometheus__yml_loop

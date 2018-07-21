@@ -1,0 +1,5 @@
+---
+- name: install packages
+  apt:
+    name: "{{ prometheus__required_packages |to_package_list }}"
+    state: present
