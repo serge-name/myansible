@@ -1,0 +1,10 @@
+---
+- name: install config
+  template:
+    src:     defaults.j2
+    dest:    "{{ prometheus_node_exporter__conf_path }}"
+    mode:    0644
+    owner:   root
+    group:   root
+    backup:  yes
+  notify: restart prometheus_node_exporter

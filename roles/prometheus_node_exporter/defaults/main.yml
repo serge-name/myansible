@@ -1,0 +1,10 @@
+---
+prometheus_node_exporter__required_packages:
+  prometheus-node-exporter: true
+
+prometheus_node_exporter__user: 'prometheus'
+prometheus_node_exporter__group: 'prometheus'
+
+prometheus_node_exporter__conf_path: '/etc/default/prometheus-node-exporter'
+
+prometheus_node_exporter__conf: {}
