@@ -1,0 +1,17 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=Generate textfile metrics for prometheus-node-exporter
+ConditionPathIsDirectory={{ prometheus_node_exporter__textfile_path }}
+
+[Service]
+Type=oneshot
+
+User={{ prometheus_node_exporter__user }}
+PrivateTmp=yes
+ProtectSystem=strict
+CapabilityBoundingSet=
+PrivateDevices=true
+ReadWriteDirectories={{ prometheus_node_exporter__textfile_path }}
+
+ExecStart=-/usr/local/bin/prom_upgradable_packages

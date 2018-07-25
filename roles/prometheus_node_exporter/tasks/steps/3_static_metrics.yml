@@ -1,0 +1,12 @@
+---
+- name: add node_fqdn
+  copy:
+    content: |
+      # HELP node_fqdn Node FQDN
+      # TYPE node_fqdn untyped
+      node_fqdn{node_fqdn="{{ ansible_fqdn }}"} 1
+    dest: "{{ prometheus_node_exporter__textfile_path }}/fqdn.prom"
+    mode: 0644
+    owner: "{{ prometheus_node_exporter__user }}"
+    group: "{{ prometheus_node_exporter__group }}"
+    backup: false

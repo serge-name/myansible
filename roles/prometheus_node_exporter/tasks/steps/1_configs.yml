@@ -8,3 +8,11 @@
     group:   root
     backup:  yes
   notify: restart prometheus_node_exporter
+
+- name: fix textfile dir permissions
+  file:
+    state: directory
+    path:  "{{ prometheus_node_exporter__textfile_path }}"
+    mode:  0755
+    owner: "{{ prometheus_node_exporter__user }}"
+    group: "{{ prometheus_node_exporter__group }}"

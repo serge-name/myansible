@@ -3,3 +3,8 @@
   systemd:
     unit: prometheus-node-exporter.service
     state: restarted
+
+- name: restart prometheus-node-generate-textfile-metrics-hourly.timer
+  systemd:
+    unit: prometheus-node-generate-textfile-metrics-hourly.timer
+    state: restarted

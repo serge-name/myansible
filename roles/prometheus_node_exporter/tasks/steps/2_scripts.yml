@@ -1,0 +1,27 @@
+---
+- name: install prom_upgradable_packages
+  template:
+    src:   prom_upgradable_packages.j2
+    dest:  /usr/local/bin/prom_upgradable_packages
+    mode:  0755
+    owner: root
+    group: root
+
+- name: install systemd units
+  template:
+    src:  "systemd/prometheus-node-generate-textfile-metrics-hourly.{{ item }}.j2"
+    dest: "/etc/systemd/system/prometheus-node-generate-textfile-metrics-hourly.{{ item }}"
+    mode:  0644
+    owner: root
+    group: root
+  notify: restart prometheus-node-generate-textfile-metrics-hourly.timer
+  with_items:
+    - service
+    - timer
+
+- name: activate systemd units
+  systemd:
+    unit: prometheus-node-generate-textfile-metrics-hourly.timer
+    state: started
+    enabled: true
+    daemon_reload: true

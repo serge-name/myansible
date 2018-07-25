@@ -3,5 +3,7 @@
   with_items:
     - '0_packages'
     - '1_configs'
+    - '2_scripts'
+    - '3_static_metrics'
   loop_control:
     loop_var: prometheus_node_exporter__yml_loop

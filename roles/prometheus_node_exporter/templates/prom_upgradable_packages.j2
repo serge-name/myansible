@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+TEXTFILE_PATH = '{{ prometheus_node_exporter__textfile_path }}'
+
+require 'tempfile'
+
+def security_upgrade?(line)
+  line.include?(' Debian-Security:')
+end
+
+def get_labels(labels)
+  return "" if labels.nil? || labels.empty?
+
+  [
+    '{',
+    labels.map { |k,v| "#{k}=\"#{v}\"" }.join(','),
+    '}'
+  ].join
+end
+
+def write_metrics(f, name, value, help = nil, type = nil, *opt)
+  f.puts "# HELP #{name} #{help}" unless help.nil?
+  f.puts "# TYPE #{name} #{type}" unless type.nil?
+  f.puts "#{name}#{get_labels(opt.first)} #{value}"
+end
+
+tf_basename = 'upgradable_packages'
+
+Tempfile.create(tf_basename, TEXTFILE_PATH) do |tf|
+  p_total = `aptitude search -F '%p' '~U'`.lines.length
+  write_metrics(tf, 'node_upgradable_packages_total', p_total,
+                    'Number of all upgradable packages',
+                    'gauge')
+
+  # '%O' search pattern work only on aptitude >=0.8
+  p_security = `aptitude search -F '%p %O' '~U'`.lines.find_all { |el| security_upgrade?(el) }.length
+  write_metrics(tf, 'node_upgradable_packages_security', p_security,
+                    'Number of security releated upgradable packages',
+                    'gauge')
+
+  tf.flush
+  File.link(tf.path, File.join(TEXTFILE_PATH, "#{tf_basename}.prom"))
+end

@@ -1,0 +1,10 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=Generate textfile metrics for prometheus-node-exporter
+
+[Timer]
+OnCalendar=hourly
+
+[Install]
+WantedBy=timers.target
