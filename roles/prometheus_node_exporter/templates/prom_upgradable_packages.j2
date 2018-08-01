@@ -3,6 +3,7 @@
 TEXTFILE_PATH = '{{ prometheus_node_exporter__textfile_path }}'
 
 require 'tempfile'
+require 'fileutils'
 
 def security_upgrade?(line)
   line.include?(' Debian-Security:')
@@ -39,5 +40,5 @@ Tempfile.create(tf_basename, TEXTFILE_PATH) do |tf|
                     'gauge')
 
   tf.flush
-  File.link(tf.path, File.join(TEXTFILE_PATH, "#{tf_basename}.prom"))
+  FileUtils.ln(tf.path, File.join(TEXTFILE_PATH, "#{tf_basename}.prom"), force: true)
 end
