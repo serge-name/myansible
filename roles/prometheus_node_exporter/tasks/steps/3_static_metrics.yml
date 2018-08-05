@@ -14,10 +14,15 @@
   changed_when: false
   register: prometheus_node_exporter__v_location
 
+- set_fact:
+    prometheus_node_exporter__location_dc: "{{ prometheus_node_exporter__v_location.stdout }}"
+  when:
+    - prometheus_node_exporter__v_location.rc == 0
+    - prometheus_node_exporter__v_location.stdout != ""
+
 - name: add node_location_dc
   node_set_metric:
     name:       'location_dc'
-    content:    "{{ prometheus_node_exporter__v_location.stdout |default(prometheus_node_exporter__location_dc) }}"
+    content:    "{{ prometheus_node_exporter__location_dc }}"
     help_text:  "Node location (Datacenter)"
   become_user: "{{ prometheus_node_exporter__user }}"
-  when: ((prometheus_node_exporter__v_location.rc == 0) and (prometheus_node_exporter__v_location.stdout != "")) or (prometheus_node_exporter__location_dc is defined)
