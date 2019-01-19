@@ -20,3 +20,4 @@ certbot__reload_service_cmds:
 certbot__nginx_include_dir: "{{ certbot__etc_dir }}-nginx"
 
 certbot__internal_web_server: false
+certbot__python_exe: /usr/bin/python3
