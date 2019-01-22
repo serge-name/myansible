@@ -77,6 +77,7 @@ common_packages__wanted:
     condition: "{{ (ansible_virtualization_type == 'kvm') and (ansible_virtualization_role == 'guest') and (ansible_distribution == 'Debian') }}"
     packages:
       qemu-guest-agent:     true
+      haveged:              true
 
   not_container:
     condition: "{{ (ansible_virtualization_type != 'lxc') and (ansible_virtualization_type != 'openvz') }} "
