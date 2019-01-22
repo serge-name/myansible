@@ -42,7 +42,6 @@ common_packages__wanted:
       ca-certificates:      true
 
       # packages
-      apt-transport-https:  true
       aptitude:             true
       debconf-utils:        true
 
@@ -60,6 +59,12 @@ common_packages__wanted:
     condition: "{{ ansible_lsb.codename == 'jessie' }}"
     packages:
       pinentry-curses:      true
+      apt-transport-https:  true
+
+  debian9:
+    condition: "{{ ansible_lsb.codename == 'stretch' }}"
+    packages:
+      apt-transport-https:  true
 
   systemd:
     condition: "{{ ansible_service_mgr == 'systemd' }}"
