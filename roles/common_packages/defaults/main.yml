@@ -124,6 +124,7 @@ common_packages__unwanted:
       host:                 true
       eject:                true
       vim-tiny:             true
+      installation-report:  true
 
   ubuntu1604:
     condition: "{{ ansible_lsb.codename == 'xenial' }}"
