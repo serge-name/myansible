@@ -1,0 +1,30 @@
+---
+# FIXME: use zram-tools package instead?
+
+- name: install start/stop scripts
+  template:
+    src:    "zram_swap_{{ item }}.sh.j2"
+    dest:   "{{ zram_swap__sbin_dir }}/zram_swap_{{ item }}.sh"
+    owner:  root
+    group:  root
+    mode:   0755
+    backup: true
+  with_items:
+    - start
+    - stop
+
+- name: install systemd.unit
+  template:
+    src:    "zram_swap.service.j2"
+    dest:   "/etc/systemd/system/zram_swap.service"
+    owner:  root
+    group:  root
+    mode:   0644
+    backup: true
+
+- name: activate systemd.unit
+  systemd:
+    unit: zram_swap.service
+    daemon_reload: true
+    enabled: true
+    state: started

@@ -1,0 +1,9 @@
+---
+- name: install default options for zram
+  template:
+    src:    zram.conf.j2
+    dest:   /etc/modprobe.d/zram.conf
+    backup: true
+    owner:  root
+    group:  root
+    mode:   0644

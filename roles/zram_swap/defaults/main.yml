@@ -1,0 +1,4 @@
+---
+zram_swap__ram_pct: 25
+
+zram_swap__sbin_dir: /usr/local/sbin

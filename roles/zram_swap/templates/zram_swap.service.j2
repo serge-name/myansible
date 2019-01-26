@@ -1,0 +1,19 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=zram swap
+PartOf=swap.target
+Conflicts=shutdown.target
+ConditionFileIsExecutable={{ zram_swap__sbin_dir }}/zram_swap_start.sh
+ConditionFileIsExecutable={{ zram_swap__sbin_dir }}/zram_swap_stop.sh
+
+[Service]
+Type=simple
+
+ExecStart={{ zram_swap__sbin_dir }}/zram_swap_start.sh
+ExecStop={{ zram_swap__sbin_dir }}/zram_swap_stop.sh
+RemainAfterExit=yes
+Restart=no
+
+[Install]
+WantedBy=swap.target

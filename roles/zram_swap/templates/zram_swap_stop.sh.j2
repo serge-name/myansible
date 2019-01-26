@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# **** {{ ansible_managed }} ****
+
+set -e
+
+find_swap_zram() {
+  egrep -o '/dev/zram[[:digit:]]+' /proc/swaps
+}
+
+zram_dev="$(find_swap_zram)" || { echo "unable to find zram swap" >&2; exit 1; }
+zram_path="/sys/block/$(basename $zram_dev)"
+
+swapoff $zram_dev
+echo 1 >$zram_path/reset

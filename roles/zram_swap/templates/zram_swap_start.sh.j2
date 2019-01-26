@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# **** {{ ansible_managed }} ****
+
+set -e
+
+find_free_zram() {
+  for p in /sys/block/zram*; do
+    [ "$(cat $p/size)" = "0" ] && { echo $p; exit 0; }
+  done
+
+  exit 1
+}
+
+find_swap_zram() {
+  egrep -qo '/dev/zram[[:digit:]]+' /proc/swaps
+}
+
+pct_allocate={{ zram_swap__ram_pct }}
+
+find_swap_zram && { echo "zram swap already started" >&2; exit 1; }
+
+total_ram_kb=`grep '^MemTotal:' /proc/meminfo |egrep -o '[[:digit:]]+'`
+zram_size_kb=$[total_ram_kb * ${pct_allocate} / 100]
+
+modprobe zram
+sleep 1
+
+zram_path="$(find_free_zram)" || { echo "unable to find free zram" >&2; exit 1; }
+zram_dev="/dev/$(basename $zram_path)"
+
+echo lz4 >$zram_path/comp_algorithm
+echo ${zram_size_kb}k >$zram_path/disksize
+
+mkswap $zram_dev
+
+swapon -p 9999 $zram_dev
