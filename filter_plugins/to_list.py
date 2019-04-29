@@ -14,4 +14,4 @@ class FilterModule(object):
         elif type(input_value) in [str, unicode, ansible.parsing.yaml.objects.AnsibleUnicode]:
             return [input_value]
         else:
-            raise TypeError, u"{} must be either list or str (got {})".format(input_value, str(type(input_value)))
+            raise TypeError(u"{} must be either list or str (got {})".format(input_value, str(type(input_value))))

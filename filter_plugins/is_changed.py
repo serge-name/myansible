@@ -8,7 +8,7 @@ class FilterModule(object):
 
     def is_changed(self, input_value, key, value):
         if type(input_value) is not dict:
-            raise TypeError, u"{} must be dict (got {})".format(input_value, str(type(input_value)))
+            raise TypeError(u"{} must be dict (got {})".format(input_value, str(type(input_value))))
 
         if input_value.has_key('results'):
             res = input_value['results']
