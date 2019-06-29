@@ -6,20 +6,23 @@
   lineinfile:
     dest: "{{ item }}"
     insertafter: "^# set a fancy prompt"
+    firstmatch: true
     line: "debian_fqdn=`hostname -f`"
-    backup: yes
+    backup: true
   ignore_errors: true
   with_items:
     - /etc/bash.bashrc
+    - /etc/skel/.bashrc
     - /root/.bashrc
 
 - name: use hostname_fqdn in PS1
-  lineinfile:
-    dest: "{{ item }}"
-    regexp: "^ *PS1="
-    line: "PS1='${debian_chroot:+($debian_chroot)}\\u@${debian_fqdn}:\\w\\$ '"
-    backup: yes
+  replace:
+    path: "{{ item }}"
+    regexp: '^( *PS1=.+@)\\h(:.+)$'
+    replace: '\1${debian_fqdn:-\\h}\2'
+    backup: true
   ignore_errors: true
   with_items:
     - /etc/bash.bashrc
+    - /etc/skel/.bashrc
     - /root/.bashrc
