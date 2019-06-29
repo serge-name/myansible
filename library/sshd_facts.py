@@ -2,12 +2,13 @@
 
 SSHD_DEFAULT_PATH = '/usr/sbin/sshd'
 
-import commands
+import subprocess
 
 def chk_ed25519(path):
-    rc, _ = commands.getstatusoutput("grep -qs 'ed25519' {}".format(path))
-
-    rc >>= 8
+    try:
+        rc = subprocess.check_call(['grep', '-qs', 'ed25519', path])
+    except subprocess.CalledProcessError as e:
+        rc = e.returncode
 
     if rc == 0:
         return True

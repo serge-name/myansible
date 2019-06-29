@@ -4,19 +4,17 @@ TINC_CONF_BASE = '/etc/tinc'
 TINC_DEFAULT_CONF_NAME = 'default'
 
 import os
-import commands
+import subprocess
 import re
 
 
 def get_node_variable(conf_path, var):
-    res = []
-
-    rc, output = commands.getstatusoutput("tinc --config={} get {}".format(conf_path, var))
-
-    lines = output.splitlines()
-
-    if rc == 0 and len(output) > 0:
-        res = lines
+    try:
+        res = subprocess.check_output(
+            ['tinc', '--config={}'.format(conf_path), 'get', var]
+        ).splitlines()
+    except subprocess.CalledProcessError:
+        res = []
 
     return res
 

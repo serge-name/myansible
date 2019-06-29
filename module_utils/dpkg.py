@@ -1,16 +1,28 @@
-import commands
+import subprocess
+import os
+
+def run_command(*args):
+    rc = 0
+
+    try:
+        output = subprocess.check_output(args, stderr=open(os.devnull, 'w'))
+    except subprocess.CalledProcessError as e:
+        output = e.output
+        rc = e.returncode
+
+    return rc, output
 
 def get_pkg_status(package):
-    _, status = commands.getstatusoutput("dpkg-query  --show --showformat='${{Status}}' '{}' 2>/dev/null".format(package))
+    _, pkg_status = run_command('dpkg-query', '--show', '--showformat=${Status}', package)
 
-    return (status == 'install ok installed')
+    return (pkg_status == 'install ok installed')
 
 def get_pkg_version(package):
-    _, version = commands.getstatusoutput("dpkg-query  --show --showformat='${{Version}}' '{}' 2>/dev/null".format(package))
+    _, version = run_command('dpkg-query', '--show', '--showformat=${Version}', package)
 
     return version
 
 def do_compare_versions(ver1, op, ver2):
-    status, _ = commands.getstatusoutput("dpkg --compare-versions '{}' {} '{}'".format(ver1, op, ver2))
+    rc, _ = run_command('dpkg', '--compare-versions', ver1, op, ver2)
 
-    return not bool(status)
+    return not bool(rc)
