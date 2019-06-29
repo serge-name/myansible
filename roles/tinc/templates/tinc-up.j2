@@ -9,7 +9,7 @@ ip={{ tinc__ip_binary_orig }}
 {% endif %}
 
 case $NAME in
-{% for h,d in tinc__v_peers.data[tinc__v_config_net_name].iteritems() %}
+{% for h,d in tinc__v_peers.data[tinc__v_config_net_name].items() %}
   {{ d.host_name }})
     ipaddr='{{ d.address }}' ;;
 {% endfor %}
@@ -19,7 +19,7 @@ esac
 $ip l s ${INTERFACE} up
 $ip a a $ipaddr/$netmask dev ${INTERFACE}
 
-{% for h,d in tinc__v_peers.data[tinc__v_config_net_name].iteritems() %}
+{% for h,d in tinc__v_peers.data[tinc__v_config_net_name].items() %}
 {%   if d.routes %}
 if [[ "$NAME" = "{{ d.host_name }}" ]]; then
 {%     for r in d.routes %}

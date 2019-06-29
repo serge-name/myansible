@@ -1,5 +1,5 @@
 # **** {{ ansible_managed }} ****
-{% for user, permission in common_users__v_ssh_keys.iteritems() %}
+{% for user, permission in common_users__v_ssh_keys.items() %}
 {%   if permission and common_users__key_list[user] is defined %}
 
 # ---- {{ user }}

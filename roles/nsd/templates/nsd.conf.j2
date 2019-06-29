@@ -15,14 +15,14 @@ server:
   zonefiles-write: {{ nsd__zonefiles_write }}
 {% endif %}
 
-{% for k,v in nsd__keys.iteritems() %}
+{% for k,v in nsd__keys.items() %}
 key:
   name:      {{ k }}
   algorithm: {{ v.algorithm }}
   secret:    "{{ v.secret }}"
 {% endfor %}
 
-{% for k,v in nsd__zones.iteritems() %}
+{% for k,v in nsd__zones.items() %}
 zone:
   name:         "{{ k }}"
 {%   if nsd__slave_base is defined %}
@@ -32,7 +32,7 @@ zone:
   request-xfr:  AXFR {{ v.master }} {{ v.key }}
 {% endfor %}
 
-{% for k,v in nsd__master_zones.iteritems() %}
+{% for k,v in nsd__master_zones.items() %}
 zone:
   name:         "{{ k }}"
   zonefile:     "{{ nsd__master_base }}/{{ k }}"

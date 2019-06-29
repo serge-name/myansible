@@ -1,5 +1,5 @@
 # **** {{ ansible_managed }} ****
 
-{% for item,dummy in common_fstrim__supported.iteritems() %}
+{% for item,dummy in common_fstrim__supported.items() %}
 15 4 * * *    root    /sbin/fstrim -v {{ item }} 2>&1 |logger -p daemon.notice -t fstrim
 {% endfor %}

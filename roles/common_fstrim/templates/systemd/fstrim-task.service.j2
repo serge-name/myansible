@@ -5,7 +5,7 @@ Description=fstrim
 
 [Service]
 Type=oneshot
-{% for item,dummy in common_fstrim__supported.iteritems() %}
+{% for item,dummy in common_fstrim__supported.items() %}
 ExecStart=/sbin/fstrim -v {{ item }}
 {% endfor %}
 User=root
