@@ -10,8 +10,8 @@ After=network-online.target
 [Service]
 Type=simple
 
-CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN
-AmbientCapabilities=CAP_NET_BIND_SERVICE CAP_NET_RAW CAP_NET_ADMIN
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE CAP_NET_RAW
+AmbientCapabilities=CAP_NET_BIND_SERVICE CAP_NET_RAW
 PrivateDevices=true
 ProtectKernelTunables=true
 PrivateTmp=true
@@ -20,9 +20,7 @@ ReadWritePaths={{ ipv6_duid__dhclient_lib_dir }}
 ProtectHome=read-only
 RestrictNamespaces=true
 
-RuntimeDirectory=dhclient
-ExecStart=/sbin/dhclient -d -cf {{ ipv6_duid__dhclient_conf_file }} -pf {{ ipv6_duid__dhclient_pid_file }} -6 -P -v {{ ipv6_duid__interface }}
-ExecStop=/sbin/dhclient -r -pf {{ ipv6_duid__dhclient_pid_file }} -6 {{ ipv6_duid__interface }}
+ExecStart=/sbin/dhclient -d --no-pid -cf {{ ipv6_duid__dhclient_conf_file }} -6 -P -v {{ ipv6_duid__interface }}
 TimeoutStopSec=8s
 Restart=always
 RestartSec=16s

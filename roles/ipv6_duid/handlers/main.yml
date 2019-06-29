@@ -1,3 +1,5 @@
 ---
 - name: restart ipv6-duid.service
-  command: '/bin/true'
+  systemd:
+    unit: ipv6-duid.service
+    state: restarted

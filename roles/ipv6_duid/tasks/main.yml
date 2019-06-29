@@ -1,9 +1,30 @@
 ---
-- include_tasks: "steps/{{ ipv6_duid__v_install_loop.step }}.yml"
-  when: ipv6_duid__v_install_loop.condition == true
-  with_items:
-    - { step: '0_packages',  condition: true }
-    - { step: '1_conf',      condition: true }
-    - { step: '2_systemd',   condition: true }
-  loop_control:
-    loop_var: ipv6_duid__v_install_loop
+- name: install packages
+  apt:
+    name: "{{ ipv6_duid__required_packages |to_package_list }}"
+    state: present
+
+- name: install dhclient config
+  template:
+    src:    "{{ ipv6_duid__dhclient_conf_file |basename }}.j2"
+    dest:   "{{ ipv6_duid__dhclient_conf_file }}"
+    backup: yes
+    owner:  root
+    group:  root
+    mode:   0644
+  notify: restart ipv6-duid.service
+
+- name: create systemd unit
+  template:
+    src:    ipv6-duid.service.j2
+    dest:   /etc/systemd/system/ipv6-duid.service
+    backup: yes
+    owner:  root
+    group:  root
+    mode:   0644
+  notify: restart ipv6-duid.service
+
+- systemd:
+    unit: ipv6-duid.service
+    daemon_reload: yes
+    enabled: yes
