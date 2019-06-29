@@ -6,7 +6,6 @@
   lineinfile:
     dest: "{{ item }}"
     insertafter: "^# set a fancy prompt"
-    firstmatch: true
     line: "debian_fqdn=`hostname -f`"
     backup: true
   ignore_errors: true
