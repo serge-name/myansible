@@ -2,6 +2,8 @@
 
 [Unit]
 Description=Renew certificates
+Wants=dehydrated-pre.service
+After=dehydrated-pre.service
 Requires=dehydrated-post.service
 ConditionFileIsExecutable={{ dehydrated__cmd_path }}
 

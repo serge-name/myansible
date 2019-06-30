@@ -56,6 +56,16 @@
     - dehydrated.timer
   notify: restart dehydrated.timer
 
+- name: converge dehydrated-pre
+  template:
+    src:  "systemd/dehydrated-pre.service.j2"
+    dest: "/etc/systemd/system/dehydrated-pre.service"
+    owner: root
+    group: root
+    mode:  0644
+    backup: yes
+  when: not (dehydrated__pre_commands |is_empty)
+
 - name: ensure our timer is started
   systemd:
     unit:    dehydrated.timer

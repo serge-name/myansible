@@ -14,3 +14,5 @@ dehydrated__key_algo: 'secp384r1'
 
 dehydrated__reload_services:
   - nginx
+
+dehydrated__pre_commands: []

@@ -1,0 +1,17 @@
+# **** {{ ansible_managed }} ****
+
+[Unit]
+Description=Prepare to issue a certificate
+Before=dehydrated.service
+Before=dehydrated-post.service
+
+[Service]
+Type=oneshot
+
+User=root
+
+ExecStart=-/bin/bash -c "\
+{% for cmd in dehydrated__pre_commands %}
+  {{ cmd }}; \
+{% endfor %}
+"
