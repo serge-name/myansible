@@ -16,6 +16,7 @@ common_packages__wanted:
       most:                 true
       unzip:                true
       sudo:                 true
+      manpages:             true
 
       # system
       strace:               true
