@@ -36,8 +36,8 @@ zone:
 zone:
   name:         "{{ k }}"
   zonefile:     "{{ nsd__master_base }}/{{ k }}"
-{%   for ip in v.slaves|default([]) %}
-  provide-xfr:  {{ ip }} NOKEY
-  notify:       {{ ip }} NOKEY
+{%   for ip,k in v.slaves.items()|default({}) %}
+  provide-xfr:  {{ ip }} {{ k }}
+  notify:       {{ ip }} {{ k }}
 {%   endfor %}
 {% endfor %}
