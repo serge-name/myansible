@@ -32,14 +32,14 @@ zone:
   request-xfr:  AXFR {{ v.master }} {{ v.key }}
 {% endfor %}
 
-{% for k,v in nsd__master_zones.items() %}
+{% for k,v in nsd__master_zones|dictsort() %}
 zone:
   name:         "{{ k }}"
   zonefile:     "{{ nsd__master_base }}/{{ k }}"
-{%   for ip,k in v.slaves_xfr.items()|default({}) %}
+{%   for ip,k in v.slaves_xfr|default({})|dictsort() %}
   provide-xfr:  {{ ip }} {{ k }}
 {%   endfor %}
-{%   for ip,k in v.slaves_notify.items()|default({}) %}
+{%   for ip,k in v.slaves_notify|default({})|dictsort() %}
   notify:       {{ ip }} {{ k }}
 {%   endfor %}
 {% endfor %}
