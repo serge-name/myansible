@@ -1,46 +1,56 @@
 from ansible.plugins.lookup import LookupBase
 
 class LookupModule(LookupBase):
-    def get_interfaces(self, variables):
+    def get_defined(self, hostvars, iface):
         try:
-            return variables['tinc__nets'].keys()
+            ret = hostvars['tinc__nets'][iface]
         except KeyError:
-            return []
+            ret = {}
 
-    def get_interface_data(self, v, iface):
-        ret = {}
+        return ret
+
+    def get_collected(self, facts, iface):
+        try:
+            ret = facts['tinc_facts']['nets'][iface]
+        except KeyError:
+            ret = {}
+
+        return ret
+
+    def get_interface_data(self, hostvars, iface):
+        hostfacts = hostvars['ansible_facts']
         complete = True
-        if 'tinc__nets' in v and iface in v['tinc__nets']:
-            ret = v['tinc__nets'][iface]
-            for fact in ['host_name', 'pub_key']:
-                try:
-                    ret[fact] = v['tinc_facts']['nets'][iface][fact]
-                except KeyError:
+        ret = {
+            **self.get_defined(hostvars, iface),
+            **self.get_collected(hostfacts, iface),
+        }
+
+        if ret:
+            for fact in ['host_name', 'pub_key', 'address']:
+                if fact not in ret:
                     complete = False
+
             if 'routes' not in ret:
                 ret['routes'] = []
-            ret['ansible_default_ipv4_address'] = v['ansible_default_ipv4']['address']
-            ret['ansible_default_ipv6_address'] = v['ansible_default_ipv6'].get('address', '')
+
+            ret['default_ipv4_address'] = hostfacts.get('default_ipv4', {}).get('address', '')
+            ret['default_ipv6_address'] = hostfacts.get('default_ipv6', {}).get('address', '')
 
         return complete, ret
 
-    def record_interface_data(self, ret, r, h, i):
-        if r:
-            if i not in ret:
-                ret[i] = {}
-            ret[i][h] = r
-
     def run(self, terms, variables, **kwargs):
-        hostvars = variables['hostvars']
-
         ret = {}
-        ifaces = self.get_interfaces(variables)
         complete = True
 
-        for i in ifaces:
-            for h, v in hostvars.items():
-                c, r = self.get_interface_data(v, i)
-                self.record_interface_data(ret, r, h, i)
+        for iface in variables.get('tinc__nets', {}).keys():
+            for host in variables['hostvars'].keys():
+                c, r = self.get_interface_data(variables['hostvars'][host], iface)
+
+                if r:
+                    if iface not in ret:
+                        ret[iface] = {}
+                    ret[iface][host] = r
+
                 if not c:
                     complete = False
 
