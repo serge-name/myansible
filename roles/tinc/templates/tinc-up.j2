@@ -2,11 +2,7 @@
 # **** {{ ansible_managed }} ****
 
 netmask={{ tinc__v_config_net.mask }}
-{% if ansible_virtualization_type == 'openvz' %}
-ip={{ tinc__ip_binary_local }}
-{% else %}
 ip={{ tinc__ip_binary_orig }}
-{% endif %}
 
 case $NAME in
 {% for h,d in tinc__v_peers.data[tinc__v_config_net_name].items() %}

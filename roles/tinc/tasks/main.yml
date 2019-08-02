@@ -5,7 +5,6 @@
     - { step: '0_user',                      condition: "{{ not tinc__fast_configure }}" }
     - { step: '1_systemd',                   condition: "{{ not tinc__fast_configure }}" }
     - { step: '2_packages',                  condition: "{{ not tinc__fast_configure }}" }
-    - { step: '3_openvz_systemd_workaround', condition: "{{ not tinc__fast_configure and ansible_virtualization_type == 'openvz' }}" }
-    - { step: '4_config',                    condition: true }
+    - { step: '3_config',                    condition: true }
   loop_control:
     loop_var: tinc__v_install_loop

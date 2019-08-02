@@ -7,7 +7,7 @@
     group: "{{ tinc__group }}"
     mode:  0750
 
-- include_tasks: 4a_config_net.yml
+- include_tasks: 3a_config_net.yml
   vars:
     tinc__v_config_net: "{{ item.value }}"
     tinc__v_config_net_name: "{{ item.key }}"
@@ -25,14 +25,14 @@
   when: not tinc__v_peers.complete
 
 - block:
-    - include_tasks: 4b_config_net_scripts.yml
+    - include_tasks: 3b_config_net_scripts.yml
       vars:
         tinc__v_config_net: "{{ item.value }}"
         tinc__v_config_net_name: "{{ item.key }}"
         tinc__v_config_net_base: "{{ tinc__conf_base }}/{{ item.key }}"
       with_dict: "{{ tinc__nets }}"
 
-    - include_tasks: 4c_config_net_hosts.yml
+    - include_tasks: 3c_config_net_hosts.yml
       vars:
         tinc__v_config_net: "{{ item.value }}"
         tinc__v_config_net_name: "{{ item.key }}"
