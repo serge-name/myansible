@@ -1,8 +1,3 @@
-# coding: utf-8
-
-from __future__ import (absolute_import, division, print_function)
-__metaclass__ = type
-
 from ansible.plugins.lookup import LookupBase
 
 class LookupModule(LookupBase):
@@ -15,14 +10,14 @@ class LookupModule(LookupBase):
     def get_interface_data(self, v, iface):
         ret = {}
         complete = True
-        if v.has_key('tinc__nets') and v['tinc__nets'].has_key(iface):
+        if 'tinc__nets' in v and iface in v['tinc__nets']:
             ret = v['tinc__nets'][iface]
             for fact in ['host_name', 'pub_key']:
                 try:
                     ret[fact] = v['tinc_facts']['nets'][iface][fact]
                 except KeyError:
                     complete = False
-            if not ret.has_key('routes'):
+            if 'routes' not in ret:
                 ret['routes'] = []
             ret['ansible_default_ipv4_address'] = v['ansible_default_ipv4']['address']
             ret['ansible_default_ipv6_address'] = v['ansible_default_ipv6'].get('address', '')
@@ -31,7 +26,7 @@ class LookupModule(LookupBase):
 
     def record_interface_data(self, ret, r, h, i):
         if r:
-            if not ret.has_key(i):
+            if i not in ret:
                 ret[i] = {}
             ret[i][h] = r
 
