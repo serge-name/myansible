@@ -5,7 +5,7 @@ def run_command(*args):
     rc = 0
 
     try:
-        output = subprocess.check_output(args, stderr=open(os.devnull, 'w'))
+        output = subprocess.check_output(args, stderr=open(os.devnull, 'w')).decode()
     except subprocess.CalledProcessError as e:
         output = e.output
         rc = e.returncode
