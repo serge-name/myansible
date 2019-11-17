@@ -1,0 +1,10 @@
+---
+- include_tasks: "steps/{{ proxmox__v_install_loop.step }}.yml"
+  when: proxmox__v_install_loop.condition == true
+  with_items:
+    - { step: '0_repo',                     condition: true }
+    - { step: '1_rm_enterprise_repo',       condition: true }
+    - { step: '2_rm_enterprise_js_notify',  condition: true }
+    - { step: '3_rm_permitrootlogin',       condition: true }
+  loop_control:
+    loop_var: proxmox__v_install_loop

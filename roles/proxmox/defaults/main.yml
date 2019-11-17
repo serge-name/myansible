@@ -1,0 +1,9 @@
+---
+proxmox__version_major: 6
+
+proxmox__keyring_file:    "proxmox-ve-release-{{ proxmox__version_major }}.x.gpg"
+proxmox__keyring_dir:     '/etc/apt/keyrings'   # FIXME: create an Ansible module
+proxmox__keyring:         "{{ proxmox__keyring_dir }}/{{ proxmox__keyring_file }}"
+
+proxmox__js_widget_path:  '/usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js'
+proxmox__cluster_pm_path: '/usr/share/perl5/PVE/Cluster.pm'

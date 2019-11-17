@@ -1,3 +1,0 @@
----
-proxmox_noenterprise__js_manager_path: '/usr/share/pve-manager/js/pvemanagerlib.js'
-proxmox_noenterprise__js_widget_path:  '/usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js'

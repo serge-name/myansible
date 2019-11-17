@@ -1,0 +1,6 @@
+---
+
+- name: remove Proxmox enterprise repo
+  file:
+    path: /etc/apt/sources.list.d/pve-enterprise.list
+    state: absent

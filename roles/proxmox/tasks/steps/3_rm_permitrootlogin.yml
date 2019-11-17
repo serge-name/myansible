@@ -1,22 +1,17 @@
 ---
-- name: check pve-manager version
-  pkg_check:
-    name: pve-manager
-  register: proxmox_noenterprise__v_package
 
 # remove the crap
 - name: patch perl module
   replace:
-    path: "{{ proxmox_noenterprise__pm_path }}"
+    path: "{{ proxmox__cluster_pm_path }}"
     regexp: "return if\\s+.*PermitRootLogin.*;$"
     replace: "return;"
     backup: yes
-  when: proxmox_noenterprise__v_package.installed
+  failed_when: false
 
 - name: fix things
   replace:
     path: /etc/ssh/sshd_config
     regexp: '(?i)^\s*PermitRootLogin\s+yes.*$'
     replace: 'PermitRootLogin prohibit-password'
-  when: proxmox_noenterprise__v_package.installed
   notify: reload ssh.service

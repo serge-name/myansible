@@ -1,0 +1,9 @@
+---
+
+- name: patch JS
+  replace:
+    path: "{{ proxmox__js_widget_path }}"
+    regexp: "if \\(data\\.status !== 'Active'\\) \\{"
+    replace: "if (false) {"
+    backup: no
+  failed_when: false

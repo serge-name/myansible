@@ -1,0 +1,44 @@
+---
+
+- name: create keyring directory
+  file:
+    state: directory
+    path:  "{{ proxmox__keyring_dir }}"
+    owner: root
+    group: root
+    mode:  0755
+
+- name: check whether keyring is not a symlink or a hardlink (some paranoia)
+  stat:
+    path: "{{ proxmox__keyring }}"
+  register: proxmox__v_keyring
+
+- name: fail if keyring is a symlink or a hardlink (some paranoia)
+  fail: "{{ proxmox__v_keyring.stat.path }}: is a link!!!"
+  when: >
+    proxmox__v_keyring.stat.exists
+    and (proxmox__v_keyring.stat.islnk
+    or proxmox__v_keyring.stat.nlink > 1)
+
+- name: install keyring
+  copy:
+    src:    "files/{{ proxmox__keyring_file }}"
+    dest:   "{{ proxmox__keyring }}"
+    owner:  root
+    group:  root
+    mode:   0644
+
+- name: install Proxmox source
+  template:
+    src:    "proxmox-{{ proxmox__version_major }}.sources.j2"
+    dest:   "/etc/apt/sources.list.d/proxmox-{{ proxmox__version_major }}.sources"
+    owner:  root
+    group:  root
+    mode:   0644
+  register: proxmox__v_source
+
+- name: update apt repos
+  command: apt-get update
+  args:
+    warn: false
+  when: proxmox__v_source.changed
