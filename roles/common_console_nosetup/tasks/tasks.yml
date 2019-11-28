@@ -7,22 +7,20 @@
         purge: yes
   when: ansible_distribution == 'Debian'
 
-- name: check grub defaults
-  shell: >
-    if [ -f {{ common_console_nosetup__grub_defaults_path }} ]; then
-      egrep 'GRUB_CMDLINE_LINUX(_DEFAULT)?=' {{ common_console_nosetup__grub_defaults_path }} |grep -q '[ "]nomodeset[ "]' ;
-    else
-      true ;
-    fi
-  changed_when: false
-  failed_when: false
-  register: common_console_nosetup__v_grub_defaults
+- name: ensure grub.d
+  file:
+    state: directory
+    path:  /etc/default/grub.d
+    mode:  0755
+    owner: root
+    group: root
 
-- name: update grub defaults
-  replace:
-    path: "{{ common_console_nosetup__grub_defaults_path }}"
-    regexp: '^(\s*)GRUB_CMDLINE_LINUX_DEFAULT="([^"]*)"(.*)$'
-    replace: '\1GRUB_CMDLINE_LINUX_DEFAULT="\2 nomodeset"\3'
-    backup: yes
-  when: not ansible_check_mode and common_console_nosetup__v_grub_defaults.rc != 0
+- name: add a config file
+  copy:
+    content: >
+      GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX nomodeset"
+    dest: /etc/default/grub.d/99-nomodeset.cfg
+    mode:  0644
+    owner: root
+    group: root
   notify: update-grub
