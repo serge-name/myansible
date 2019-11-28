@@ -7,5 +7,9 @@
     mode:   0644
     owner:  root
     group:  root
+  vars:
+    package:      "{{ item.value.packages }}"
+    pin:          "{{ common_apt_v__repo_preferences_pin }}"
+    pin_priority: "{{ item.value.priority }}"
   with_dict:
     - "{{ common_apt_v__repo_preferences }}"

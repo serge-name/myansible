@@ -66,9 +66,16 @@
 
 - name: converge preferences
   template:
-    src:    preferences.j2
-    dest:   "{{ common_apt__base_dir }}/preferences"
-    backup: yes
+    src:    repo_preferences.j2
+    dest:   "{{ common_apt__base_dir }}/preferences.d/{{ item.name }}"
+    backup: no
     mode:   0644
     owner:  root
     group:  root
+  vars:
+    package:      "*"
+    pin:          "{{ item.pin }}"
+    pin_priority: "{{ item.priority }}"
+  with_items:
+    - { name: debian_unstable,  pin: 'release o=Debian,a=unstable', priority: 99  }
+    - { name: debian_backports, pin: 'release o=Debian Backports',  priority: 500 }
