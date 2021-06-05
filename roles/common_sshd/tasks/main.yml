@@ -1,7 +1,10 @@
 ---
+- name: gather facts
+  ssh_facts:
+
 - name: converge config
   template:
-    src:    "sshd_config.{{ common_sshd__distro_string }}.j2"
+    src:    sshd_config.j2
     dest:   "/etc/ssh/sshd_config"
     backup: yes
     mode:   0644
